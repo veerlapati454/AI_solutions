@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Solutions · Partner Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0A0C0F;
+      color: #EDF2F7;
+      -webkit-font-smoothing: antialiased;
+    }
+    :root {
+      --bg: #0A0C0F;
+      --surface: #13171C;
+      --surface-2: #1B2128;
+      --border: rgba(237,242,247,0.08);
+      --text: #EDF2F7;
+      --text-dim: rgba(237,242,247,0.65);
+      --text-dimmer: rgba(237,242,247,0.4);
+      --accent: #6C9BFF;
+      --accent-soft: rgba(108,155,255,0.12);
+      --accent-glow: rgba(108,155,255,0.25);
+      --stamp: #6C9BFF;
+      --green: #4ADE80;
+      --amber: #FBBF24;
+      --red: #F87171;
+      --slate: #94A3B8;
+      --display: 'Inter', 'Segoe UI', sans-serif;
+      --mono: 'Space Mono', monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    ::selection { background: var(--accent); color: #0A0C0F; }
+    .dashboard-root { display: flex; min-height: 100vh; max-width: 100vw; position: relative; background: var(--bg); }
+    .dashboard-root::before {
+      content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle at 20% 30%, rgba(108,155,255,0.04) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 70%, rgba(108,155,255,0.03) 0%, transparent 50%);
+    }
+    .sidebar-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 40; display: none; backdrop-filter: blur(4px);
+    }
+    .sidebar-overlay.show { display: block; animation: fadeIn .25s var(--ease); }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .sidebar {
+      width: 260px; flex-shrink: 0; background: var(--surface);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column;
+      padding: 20px 16px 16px; position: fixed; left: 0; top: 0;
+      height: 100vh; overflow-y: auto; z-index: 30;
+      backdrop-filter: blur(8px);
+    }
+    .sidebar-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; padding: 0 4px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .brand-logo-slot { height: 34px; display: flex; align-items: center; gap:9px; flex-shrink: 0; }
+    .brand-logo-img { height: 30px; width: auto; max-width: 170px; object-fit: contain; display: block; filter: drop-shadow(0 0 8px rgba(108,155,255,0.3)); }
+    .brand-logo-fallback {
+      width: 30px; height: 30px; border-radius: 8px;
+      border: 1px dashed rgba(108,155,255,0.5); color: var(--accent);
+      align-items: center; justify-content: center; display: none; flex-shrink:0;
+    }
+    .brand-wordmark { font-family: var(--display); font-size: 15px; font-weight: 800; letter-spacing: -0.01em; color: var(--text); }
+    .brand-wordmark em { font-style: normal; color: var(--accent); }
+    .close-btn {
+      display: none; background: none; border: none; color: var(--text-dim);
+      font-size: 18px; padding: 4px 8px; cursor:pointer;
+    }
+    .sidebar-section-label {
+      font-family: var(--mono);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+      color: var(--text-dimmer); text-transform: uppercase;
+      margin: 14px 8px 8px;
+    }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      background: none; border: none; width: 100%;
+      padding: 10px 12px; border-radius: 10px;
+      color: var(--text-dim); font-size: 13.5px; font-weight: 500;
+      text-align: left; transition: all .2s ease;
+      position: relative; cursor:pointer;
+    }
+    .nav-item:hover { background: rgba(108,155,255,0.08); color: var(--text); transform: translateX(2px); }
+    .nav-item.nav-active { background: var(--accent-soft); color: var(--accent); font-weight: 600; box-shadow: 0 0 12px var(--accent-glow); }
+    .nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+    .nav-badge { margin-left: auto; background: var(--accent); color: #0A0C0F; font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 999px; }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px; margin-top: 16px; margin-bottom: 4px;
+      border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border);
+    }
+    .sidebar-user-avatar {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent-soft); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 13px; font-weight: 800; text-transform: uppercase;
+    }
+    .sidebar-user-info { min-width: 0; flex: 1; }
+    .sidebar-user-name { font-size: 12.5px; font-weight: 700; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sidebar-user-email { font-size: 11px; color: var(--text-dimmer); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .logout-full-btn {
+      margin-top: 8px; width: 100%; padding: 11px; border-radius: 10px;
+      background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25);
+      color: #FCA5A5; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing:.03em; text-transform:uppercase;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background .2s ease; cursor:pointer;
+    }
+    .logout-full-btn:hover { background: rgba(248,113,113,0.15); }
+    .main-content { flex: 1; min-width: 0; max-width: 100%; display: flex; flex-direction: column; margin-left: 260px; position: relative; z-index: 1; }
+    .topbar {
+      position: sticky; top: 0; z-index: 25;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 14px 28px;
+      background: rgba(10,12,15,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; min-width: 0; flex: 1 1 auto; }
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center; gap: 4px;
+      width: 38px; height: 38px; border-radius: 9px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      align-items: center; flex-shrink: 0; cursor:pointer;
+    }
+    .hamburger span { width: 16px; height: 2px; background: var(--text); border-radius: 2px; }
+    .page-title { min-width: 0; }
+    .page-title h1 { font-family: var(--display); text-transform: uppercase; letter-spacing: -.01em; font-size: 21px; font-weight: 700; margin: 0; background: linear-gradient(135deg, #EDF2F7 0%, #94A3B8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .page-title p { font-size: 12.5px; color: var(--text-dim); margin: 3px 0 0; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .search-box { display: flex; align-items: center; gap: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; min-width: 0; }
+    .search-box input { background: none; border: none; outline: none; color: var(--text); font-size: 13px; width: 190px; max-width: 100%; min-width: 0; }
+    .search-box input::placeholder { color: var(--text-dimmer); }
+    .search-icon { font-size: 13px; opacity: 0.7; }
+    .icon-btn {
+      position: relative; width: 38px; height: 38px; border-radius: 10px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; font-size: 15px;
+      flex-shrink: 0; cursor:pointer; transition: all .2s ease;
+    }
+    .icon-btn:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 0 16px var(--accent-glow); }
+    .notif-dot {
+      position: absolute; top: 7px; right: 8px; width: 7px; height: 7px;
+      border-radius: 50%; background: var(--red); border: 1.5px solid var(--surface-2);
+      animation: notifPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes notifPulse { 0%,100% { box-shadow:0 0 0 0 rgba(248,113,113,.5); } 50% { box-shadow:0 0 0 4px rgba(248,113,113,0); } }
+    .topbar-user { position: relative; flex-shrink: 0; }
+    .topbar-user-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 999px; padding: 5px 12px 5px 5px;
+      transition: border-color .2s ease; cursor:pointer;
+    }
+    .topbar-user-btn:hover { border-color: var(--accent); }
+    .topbar-user-avatar {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent); color: #0A0C0F;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 12px; font-weight: 800; text-transform: uppercase;
+    }
+    .topbar-user-name { font-size: 12.5px; font-weight: 700; color: var(--text); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .topbar-user-caret { font-size: 10px; color: var(--text-dimmer); }
+    .topbar-user-menu {
+      position: absolute; top: calc(100% + 10px); right: 0; width: 230px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity .2s var(--ease), transform .2s var(--ease), visibility .2s ease;
+      z-index: 60;
+    }
+    .topbar-user.open .topbar-user-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .topbar-user-menu-email { padding: 8px 10px 10px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+    .topbar-user-menu-email .label { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--text-dimmer); text-transform: uppercase; letter-spacing: .05em; }
+    .topbar-user-menu-email .value { font-size: 12.5px; font-weight: 600; color: var(--text); margin-top: 2px; word-break: break-all; }
+    .topbar-user-menu-item {
+      display: flex; align-items: center; gap: 9px; width: 100%;
+      padding: 9px 10px; border-radius: 8px;
+      background: none; border: none; text-align: left;
+      font-size: 12.5px; font-weight: 600; color: var(--text-dim);
+      transition: background .15s ease, color .15s ease; cursor:pointer;
+    }
+    .topbar-user-menu-item:hover { background: rgba(108,155,255,0.08); color: var(--text); }
+    .topbar-user-menu-item.danger:hover { background: rgba(248,113,113,0.15); color: #FCA5A5; }
+    .content-area { padding: 24px 28px 48px; min-width: 0; max-width: 100%; overflow-x: hidden; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; margin-bottom: 20px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 18px 16px; min-width: 0;
+      transition: all .25s ease;
+      opacity:0; transform:translateY(14px); animation: cardPop .5s var(--ease) forwards;
+      cursor: pointer;
+    }
+    .stat-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(108,155,255,0.08); }
+    .stat-accent { border-color: rgba(108,155,255,0.35); background: linear-gradient(145deg, rgba(108,155,255,0.06), var(--surface) 70%); }
+    .stat-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .stat-icon { font-size: 18px; filter: drop-shadow(0 0 6px var(--accent-glow)); }
+    .stat-delta { font-family: var(--mono); font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+    .stat-delta.up { color: var(--green); background: rgba(74,222,128,0.12); }
+    .stat-value { font-family: var(--display); font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+    .stat-label { font-size: 12.5px; color: var(--text-dim); margin-top: 4px; }
+    .stat-bar { height: 5px; background: rgba(237,242,247,0.06); border-radius: 999px; margin-top: 12px; overflow: hidden; }
+    .stat-bar-fill { height: 100%; width:0; background: linear-gradient(90deg, var(--accent), #93BBFF); border-radius: 999px; transition: width 1.1s var(--ease) .3s; }
+    .mid-grid { display: grid; grid-template-columns: 1.7fr 1fr; gap: 16px; margin-bottom: 16px; align-items: start; }
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; margin-bottom: 16px; min-width: 0;
+      opacity:0; transform:translateY(14px); animation: cardPop .5s var(--ease) .1s forwards;
+    }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .card-title { font-family: var(--display); text-transform: uppercase; letter-spacing: .005em; font-size: 15px; font-weight: 700; margin: 0; color: #EDF2F7; }
+    .card-sub { font-size: 12px; color: var(--text-dim); margin: 3px 0 0; }
+    .table-wrapper { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    .runs-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    .runs-table th {
+      text-align: left; font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text-dimmer);
+      padding: 0 10px 10px; border-bottom: 1px solid var(--border);
+    }
+    .runs-table td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+    .runs-table tr:last-child td { border-bottom: none; }
+    .runs-table tbody tr { transition: background .15s ease; cursor:pointer; }
+    .runs-table tbody tr:hover { background: rgba(108,155,255,0.04); }
+    .t-name { font-weight: 600; font-size: 13px; }
+    .t-sub { font-size: 11.5px; color: var(--text-dimmer); margin-top: 2px; }
+    .type-col { color: var(--text-dim); }
+    .date-col { color: var(--text-dim); white-space: nowrap; }
+    .budget-col { font-weight: 700; white-space: nowrap; font-family: var(--mono); font-size:12.5px; }
+    .region-tag { font-family: var(--mono); font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+    .status-badge { font-family: var(--mono); font-size: 10.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; white-space: nowrap; text-transform:uppercase; letter-spacing:.02em; }
+    .status-active { background: rgba(74,222,128,0.12); color: #6EE7A7; }
+    .status-field { background: rgba(251,191,36,0.12); color: #FCD34D; }
+    .status-complete { background: rgba(148,163,184,0.15); color: #CBD5E1; }
+    .status-review { background: rgba(108,155,255,0.12); color: #93BBFF; }
+    .progress-wrap { display: flex; align-items: center; gap: 8px; min-width: 100px; }
+    .progress-bar { flex: 1; height: 6px; background: rgba(237,242,247,0.06); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; width:0; background: linear-gradient(90deg, var(--accent), #93BBFF); border-radius: 999px; transition:width 1s var(--ease) .2s; }
+    .progress-pct { font-family: var(--mono); font-size: 11px; color: var(--text-dim); flex-shrink: 0; }
+    .activity-list { display: flex; flex-direction: column; gap: 4px; padding: 0; margin: 0; }
+    .activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 6px; border-radius: 10px; transition: background .15s ease; cursor:pointer; }
+    .activity-item:hover { background: rgba(108,155,255,0.04); }
+    .act-icon { font-size: 17px; flex-shrink: 0; line-height: 1.4; }
+    .act-body { flex: 1; min-width: 0; }
+    .act-text { font-size: 13px; margin: 0; line-height: 1.5; word-wrap: break-word; }
+    .act-time { font-family: var(--mono); font-size: 11px; color: var(--text-dimmer); margin-top: 4px; display: block; }
+    .team-list { display: flex; flex-direction: column; gap: 4px; padding: 0; margin: 0; }
+    .team-item { display: flex; align-items: center; gap: 12px; padding: 10px 6px; border-radius: 10px; transition: background .15s ease; cursor:pointer; }
+    .team-item:hover { background: rgba(108,155,255,0.04); }
+    .member-avatar {
+      position: relative; width: 38px; height: 38px; border-radius: 50%;
+      background: var(--surface-2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent); flex-shrink: 0;
+    }
+    .online-dot { position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--surface); }
+    .dot-active { background: var(--green); }
+    .dot-away { background: var(--amber); }
+    .member-info { flex: 1; min-width: 0; }
+    .member-name { font-size: 13px; font-weight: 600; }
+    .member-role { font-size: 11.5px; color: var(--text-dimmer); margin-top: 1px; }
+    .member-projects { text-align: center; flex-shrink: 0; }
+    .proj-count { display: block; font-family: var(--display); font-size: 15px; color: var(--accent); }
+    .proj-label { display: block; font-family: var(--mono); font-size: 9.5px; color: var(--text-dimmer); text-transform:uppercase; }
+    .donut-chart { display: flex; justify-content: center; margin: 6px 0 14px; cursor:pointer; }
+    .donut-svg { width: 150px; height: 150px; max-width: 100%; }
+    .donut-svg circle[stroke-dasharray] { stroke-dasharray: 0 212; transition: stroke-dasharray 1.2s var(--ease) .2s; }
+    .donut-svg.drawn circle:nth-child(2) { stroke-dasharray: 62 212; }
+    .donut-svg.drawn circle:nth-child(3) { stroke-dasharray: 46 212; }
+    .donut-svg.drawn circle:nth-child(4) { stroke-dasharray: 40 212; }
+    .donut-svg.drawn circle:nth-child(5) { stroke-dasharray: 34 212; }
+    .donut-svg.drawn circle:nth-child(6) { stroke-dasharray: 30 212; }
+    .donut-num { font-family: var(--display); font-size: 21px; fill: var(--text); font-weight: 700; }
+    .donut-label { font-family: var(--mono); font-size: 8.5px; fill: var(--text-dimmer); text-transform: uppercase; letter-spacing: 0.06em; }
+    .legend-list { display: flex; flex-direction: column; gap: 9px; padding: 0; margin: 0; }
+    .legend-item { display: flex; align-items: center; gap: 9px; padding: 4px 6px; border-radius: 8px; cursor:pointer; }
+    .legend-item:hover { background: rgba(108,155,255,0.04); }
+    .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .legend-label { flex: 1; font-size: 12.5px; color: var(--text-dim); }
+    .legend-count { font-family: var(--mono); font-size: 12.5px; font-weight: 700; }
+    .btn-outline {
+      background: none; border: 1px solid var(--border); color: var(--text-dim);
+      padding: 7px 14px; border-radius: 999px; font-family: var(--mono); font-size: 11.5px; font-weight: 700; letter-spacing:.02em;
+      transition: all .2s ease; cursor:pointer;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--text); transform:translateY(-1px); box-shadow: 0 0 12px var(--accent-glow); }
+    .btn-active { border-color: var(--accent) !important; color: var(--accent) !important; }
+    @media (max-width: 1024px) {
+      .sidebar { z-index: 50; transform: translateX(-100%); transition: transform .35s var(--ease); will-change: transform; }
+      .sidebar.sidebar-open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .close-btn { display: block; }
+      .hamburger { display: flex; }
+      .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .mid-grid { grid-template-columns: 1fr; }
+      .bottom-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .bottom-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .content-area { padding: 18px 16px 40px; }
+      .topbar { padding: 14px 16px; }
+      .search-box input { width: 120px; }
+      .topbar-user-name { display: none; }
+      .topbar-user-btn { padding: 5px; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat-card { padding: 14px; }
+      .stat-value { font-size: 22px; }
+      .card { padding: 14px; }
+      .page-title h1 { font-size: 17px; }
+    }
+    @media (max-width: 400px) {
+      .search-box { display: none; }
+      .topbar { padding: 12px 12px; gap: 8px; }
+      .content-area { padding: 14px 12px 32px; }
+      .stat-card { padding: 12px; }
+      .sidebar { width: 84%; max-width: 300px; }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard-root">
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <span class="brand-logo-slot">
+          <span id="brand-wordmark" class="brand-wordmark" style="display:block;">AI<span style="color:var(--accent);">·</span>Solutions</span>
+        </span>
+      </div>
+      <button class="close-btn" id="close-sidebar-btn" aria-label="Close sidebar">✕</button>
+    </div>
+    <div class="sidebar-section-label">Core</div>
+    <nav class="sidebar-nav" id="nav-main"></nav>
+    <div class="sidebar-section-label">Infrastructure</div>
+    <nav class="sidebar-nav" id="nav-management"></nav>
+    <div class="sidebar-user" id="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-user-avatar">–</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebar-user-name">Signed out</div>
+        <div class="sidebar-user-email" id="sidebar-user-email">—</div>
+      </div>
+    </div>
+    <button class="logout-full-btn" id="logout-btn">⤍ Logout</button>
+  </aside>
+  <main class="main-content">
+    <header class="topbar" id="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger-btn" aria-label="Open menu"><span></span><span></span><span></span></button>
+        <div class="page-title">
+          <h1 id="page-title-text">Dashboard</h1>
+          <p id="page-sub-text">AI inference · model ops · partner analytics</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <span class="search-icon">⚡</span>
+          <input placeholder="Search models, deployments, logs…">
+        </div>
+        <button class="icon-btn" id="notif-btn" aria-label="Notifications">🔔<span class="notif-dot"></span></button>
+        <div class="topbar-user" id="topbar-user">
+          <button class="topbar-user-btn" id="topbar-user-btn">
+            <span class="topbar-user-avatar" id="topbar-user-avatar">–</span>
+            <span class="topbar-user-name" id="topbar-user-name">Signed out</span>
+            <span class="topbar-user-caret">▾</span>
+          </button>
+          <div class="topbar-user-menu" id="topbar-user-menu">
+            <div class="topbar-user-menu-email">
+              <div class="label">Email</div>
+              <div class="value" id="topbar-user-email">—</div>
+            </div>
+            <button class="topbar-user-menu-item" data-nav="settings">⚙️ Settings</button>
+            <button class="topbar-user-menu-item danger" id="topbar-logout-btn">⤍ Logout</button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="content-area" id="content-area"></div>
+  </main>
+</div>
+<script>
+  // ———— AI SOLUTIONS THEME ————
+  const facilityAccents = {
+    "us-west": "#6C9BFF",
+    "us-east": "#4ADE80",
+    "eu-central": "#FBBF24",
+    "ap-south": "#F87171",
+    "sa-east": "#A78BFA"
+  };
+  const productionRuns = [
+    { id: 1, name: "Llama-3-70B Fine-tune", facility: "us-west", site: "us-west", type: "Fine-tuning", status: "Active", progress: 72, endDate: "Aug 2025", budget: "$128K", manager: "A. Zhang" },
+    { id: 2, name: "Stable Diffusion XL Distill", facility: "us-east", site: "us-east", type: "Distillation", status: "Ramping Up", progress: 38, endDate: "Oct 2025", budget: "$214K", manager: "M. Rivera" },
+    { id: 3, name: "BERT Large Embedding Service", facility: "eu-central", site: "eu-central", type: "Embedding", status: "Completed", progress: 100, endDate: "Apr 2025", budget: "$96K", manager: "S. Dubois" },
+    { id: 4, name: "GPT-NeoX-20B Prompt Tuning", facility: "ap-south", site: "ap-south", type: "Prompt Tuning", status: "Active", progress: 55, endDate: "Dec 2025", budget: "$142K", manager: "R. Singh" },
+    { id: 5, name: "Whisper Large-v3 Quantization", facility: "sa-east", site: "sa-east", type: "Quantization", status: "Review", progress: 89, endDate: "Jul 2025", budget: "$58K", manager: "L. Costa" },
+    { id: 6, name: "Gemma-7B On-premise", facility: "us-west", site: "us-west", type: "Deployment", status: "Active", progress: 61, endDate: "Nov 2025", budget: "$187K", manager: "A. Zhang" },
+    { id: 7, name: "CodeLlama-34B Inference", facility: "us-east", site: "us-east", type: "Inference", status: "Ramping Up", progress: 45, endDate: "Sep 2025", budget: "$203K", manager: "M. Rivera" },
+    { id: 8, name: "Mistral-7B Chat Arena", facility: "eu-central", site: "eu-central", type: "Chat", status: "Active", progress: 28, endDate: "Jan 2026", budget: "$71K", manager: "S. Dubois" }
+  ];
+  const accountTeam = [
+    { name: "A. Zhang", role: "ML Eng Lead — US-West", experience: 8, avatar: "AZ", status: "active", projects: 3, speciality: "Fine-tuning & LoRA", email: "a.zhang@aisolutions.io" },
+    { name: "M. Rivera", role: "ML Eng — US-East", experience: 6, avatar: "MR", status: "active", projects: 2, speciality: "Distillation & Pruning", email: "m.rivera@aisolutions.io" },
+    { name: "S. Dubois", role: "Research Scientist — EU", experience: 10, avatar: "SD", status: "away", projects: 2, speciality: "Transformer Architecture", email: "s.dubois@aisolutions.io" },
+    { name: "R. Singh", role: "ML Eng — AP-South", experience: 5, avatar: "RS", status: "active", projects: 1, speciality: "Prompt Engineering", email: "r.singh@aisolutions.io" },
+    { name: "L. Costa", role: "ML Eng — SA-East", experience: 7, avatar: "LC", status: "active", projects: 1, speciality: "Quantization & ONNX", email: "l.costa@aisolutions.io" }
+  ];
+  const productCatalog = [
+    { id: "MOD-001", name: "Llama-3-70B Fine-tune", facility: "us-west", category: "Fine-tune", date: "Jan 2025", stock: "Excellent", status: "Bestseller" },
+    { id: "MOD-002", name: "SDXL Distill v2", facility: "us-east", category: "Distillation", date: "Jun 2024", stock: "Good", status: "Active" },
+    { id: "MOD-003", name: "BERT Embedding Service", facility: "eu-central", category: "Embedding", date: "Mar 2024", stock: "Low Stock", status: "Retooled" },
+    { id: "MOD-004", name: "GPT-NeoX Prompt Tuning", facility: "ap-south", category: "Prompt", date: "Sep 2024", stock: "Excellent", status: "Bestseller" },
+    { id: "MOD-005", name: "Whisper Quantized", facility: "sa-east", category: "Quantization", date: "Nov 2024", stock: "Good", status: "Active" },
+    { id: "MOD-006", name: "Gemma-7B On-prem", facility: "us-west", category: "Deployment", date: "Feb 2025", stock: "Good", status: "Active" }
+  ];
+  const qualityReports = [
+    { title: "LoRA Fine-tuning vs Full Fine-tune", authors: "Zhang, A. et al.", journal: "NeurIPS 2025", year: 2025, status: "Published", reads: 34 },
+    { title: "Quantization-aware Training for Whisper", authors: "Costa, L., Kim, J.", journal: "ICML 2025", year: 2025, status: "Published", reads: 18 },
+    { title: "Prompt Tuning for Multilingual LLMs", authors: "Singh, R., Dubois, S.", journal: "ACL 2025", year: 2025, status: "In Review", reads: 0 },
+    { title: "Inference Latency Benchmarking", authors: "Rivera, M. et al.", journal: "MLSys 2024", year: 2024, status: "Published", reads: 42 },
+    { title: "Distillation for Code Generation", authors: "Dubois, S., Zhang, A.", journal: "TMLR 2024", year: 2024, status: "Published", reads: 27 }
+  ];
+  const scheduleEvents = [
+    { date: "Jun 21", event: "US-West — Llama fine-tune checkpoint", site: "us-west", type: "urgent" },
+    { date: "Jun 25", event: "US-East — distillation review", site: "us-east", type: "normal" },
+    { date: "Jul 2", event: "EU-Central — embedding service audit", site: "eu-central", type: "normal" },
+    { date: "Jul 10", event: "Team sync: SDXL distillation results", site: "Virtual", type: "meeting" },
+    { date: "Jul 18", event: "AP-South — prompt tuning workshop", site: "ap-south", type: "normal" },
+    { date: "Aug 5", event: "SA-East — quantization final review", site: "sa-east", type: "normal" },
+    { date: "Aug 14", event: "Annual ML Eng summit", site: "London, UK", type: "meeting" }
+  ];
+  const budgetData = [
+    { site: "US-West — Llama Fine-tune", allocated: 450000, spent: 284000, facility: "us-west" },
+    { site: "US-East — SDXL Distill", allocated: 320000, spent: 108000, facility: "us-east" },
+    { site: "EU-Central — Embedding", allocated: 96000, spent: 96000, facility: "eu-central" },
+    { site: "AP-South — Prompt Tuning", allocated: 390000, spent: 201000, facility: "ap-south" },
+    { site: "SA-East — Quantization", allocated: 58000, spent: 51000, facility: "sa-east" }
+  ];
+  const liveFeed = [
+    { icon: "🏆", text: "Llama fine-tune achieved 92% accuracy on benchmark", time: "2h ago", type: "milestone" },
+    { icon: "📈", text: "US-East distillation pipeline throughput +21%", time: "4h ago", type: "performance" },
+    { icon: "✅", text: "Embedding service v3 deployed to production", time: "Yesterday", type: "complete" },
+    { icon: "⚠️", text: "AP-South GPUs at 85% utilisation — scale-up planned", time: "Yesterday", type: "alert" },
+    { icon: "🔬", text: "Quantization study yields 2.3x inference speedup", time: "2d ago", type: "update" },
+    { icon: "🎯", text: "Q3 inference targets exceeded by 12%", time: "3d ago", type: "milestone" }
+  ];
+  const navItems = [
+    { icon: "◈", label: "Dashboard", id: "dashboard" },
+    { icon: "⊞", label: "Inference Jobs", id: "runs" },
+    { icon: "⊚", label: "Model Registry", id: "products" },
+    { icon: "▤", label: "Team", id: "teams" },
+    { icon: "◉", label: "Research", id: "reports" },
+    { icon: "◷", label: "Schedule", id: "schedule" },
+    { icon: "⊟", label: "Budget", id: "budget" },
+    { icon: "⚙", label: "Settings", id: "settings" }
+  ];
+  const statusColors = { "Active": "status-active", "Ramping Up": "status-field", "Completed": "status-complete", "Review": "status-review" };
+  const stockColor = { "Excellent": "#4ADE80", "Good": "#FBBF24", "Low Stock": "#F87171" };
+  const reportStatusColor = { "Published": "#4ADE80", "In Review": "#FBBF24", "In Draft": "#94A3B8" };
+  const pageMap = {
+    dashboard: { title: "Dashboard", sub: "AI model ops · inference · fine-tuning" },
+    runs:      { title: "Inference Jobs", sub: "Active deployments and fine-tuning" },
+    teams:     { title: "AI Team", sub: "Machine learning engineers & researchers" },
+    products:  { title: "Model Registry", sub: "Fine-tuned & quantized models" },
+    reports:   { title: "Research", sub: "White papers and benchmarks" },
+    schedule:  { title: "Schedule", sub: "Milestones and reviews" },
+    budget:    { title: "Budget", sub: "Allocation by project" },
+    settings:  { title: "Settings", sub: "Account and preferences" }
+  };
+
+  function getCurrentUser() {
+    try {
+      const raw = localStorage.getItem('user');
+      const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+      if (!raw || !isAuthenticated) return null;
+      return JSON.parse(raw);
+    } catch { return null; }
+  }
+  function usernameFromEmail(email) { return email ? email.split('@')[0] : ''; }
+  const currentUser = getCurrentUser();
+  const currentEmail = currentUser?.email || '';
+  const currentUsername = usernameFromEmail(currentEmail);
+  const currentInitial = (currentUsername || currentEmail || '?').charAt(0).toUpperCase();
+
+  function paintUserChrome() {
+    const nameToShow = currentUsername || currentEmail || 'Signed out';
+    document.getElementById('sidebar-user-avatar').textContent = currentInitial;
+    document.getElementById('sidebar-user-name').textContent = nameToShow;
+    document.getElementById('sidebar-user-email').textContent = currentEmail || '—';
+    document.getElementById('topbar-user-avatar').textContent = currentInitial;
+    document.getElementById('topbar-user-name').textContent = nameToShow;
+    document.getElementById('topbar-user-email').textContent = currentEmail || '—';
+  }
+  function logout() { localStorage.removeItem('user'); localStorage.removeItem('isAuthenticated'); window.location.href = 'login.html'; }
+  let state = { activeNav: "dashboard", runFilter: "All", productSearch: "", settings: { notifications: true, emailDigest: false, darkMode: true, language: "English" } };
+  function go404() { window.location.href = "404.html"; }
+
+  function regionTag(facility) {
+    const c = facilityAccents[facility] || "#6C9BFF";
+    return `<span class="region-tag" style="color:${c};border-color:${c};background:${c}22;">${facility}</span>`;
+  }
+  function animateStatBars() {
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.stat-bar-fill, .progress-fill').forEach(el => {
+        const target = el.getAttribute('data-w');
+        if (target) el.style.width = target + '%';
+      });
+      const donut = document.querySelector('.donut-svg');
+      if (donut) donut.classList.add('drawn');
+    });
+  }
+
+  function renderDashboard() {
+    const stats = [
+      { icon: "⊞", delta: "+4 this month", value: "12", label: "Active Jobs", bar: 72, accent: true },
+      { icon: "⊚", delta: "+3 this week", value: "2,847", label: "Model Artifacts", bar: 64 },
+      { icon: "◉", delta: "On track", value: "$4.2M", label: "Project Budget", bar: 88 },
+      { icon: "◈", delta: "+1 this quarter", value: "6", label: "Inference Regions", bar: 90 }
+    ];
+    const statsHtml = stats.map(s =>
+      `<div class="stat-card ${s.accent ? "stat-accent" : ""}" onclick="go404()">
+        <div class="stat-top"><span class="stat-icon">${s.icon}</span><span class="stat-delta up">${s.delta}</span></div>
+        <div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-w="${s.bar}"></div></div>
+      </div>`
+    ).join("");
+    const rows = productionRuns.slice(0, 5).map(t =>
+      `<tr onclick="go404()">
+        <td><div class="t-name">${t.name}</div><div class="t-sub">${t.site} · ${t.manager}</div></td>
+        <td>${regionTag(t.facility)}</td>
+        <td class="type-col">${t.type}</td>
+        <td><span class="status-badge ${statusColors[t.status]}">${t.status}</span></td>
+        <td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" data-w="${t.progress}"></div></div><span class="progress-pct">${t.progress}%</span></div></td>
+        <td class="date-col">${t.endDate}</td>
+        <td class="budget-col">${t.budget}</td>
+      </tr>`
+    ).join("");
+    const feedHtml = liveFeed.map(a =>
+      `<li class="activity-item" onclick="go404()">
+        <span class="act-icon">${a.icon}</span>
+        <div class="act-body"><p class="act-text">${a.text}</p><span class="act-time">${a.time}</span></div>
+      </li>`
+    ).join("");
+    const teamHtml = accountTeam.slice(0, 5).map(m =>
+      `<li class="team-item" onclick="go404()">
+        <div class="member-avatar">${m.avatar}<span class="online-dot dot-${m.status}"></span></div>
+        <div class="member-info"><div class="member-name">${m.name}</div><div class="member-role">${m.role}</div></div>
+        <div class="member-projects"><span class="proj-count">${m.experience}</span><span class="proj-label">yrs</span></div>
+      </li>`
+    ).join("");
+    const milestones = [
+      { site: "US-West — Llama fine-tune", event: "Checkpoint review", date: "Jun 21", done: false, urgent: true },
+      { site: "US-East — SDXL Distill", event: "Distillation audit", date: "Jun 25", done: false, urgent: false },
+      { site: "EU-Central — Embedding", event: "Service audit", date: "Jul 2", done: false, urgent: false },
+      { site: "AP-South — Prompt Tuning", event: "Workshop", date: "Jul 18", done: false, urgent: false },
+      { site: "SA-East — Quantization", event: "Final review", date: "Aug 5", done: false, urgent: false }
+    ];
+    const msHtml = milestones.map(m => {
+      const parts = m.date.split(" ");
+      return `<li class="milestone-item ${m.done ? "ms-done" : ""}" onclick="go404()">
+        <div class="ms-date"><span>${parts[0]}</span><span>${parts[1]}</span></div>
+        <div class="ms-line"><div class="ms-dot"></div></div>
+        <div class="ms-body"><div class="ms-event">${m.event}</div><div class="ms-project">${m.site}</div></div>
+        ${m.urgent ? '<span class="ms-tag" style="background:rgba(248,113,113,0.18);color:#FCA5A5;">Urgent</span>' : ''}
+        ${m.done ? '<span class="ms-tag ms-done-tag" style="background:rgba(74,222,128,0.12);color:#6EE7A7;">Done</span>' : ''}
+      </li>`;
+    }).join("");
+    const legend = [
+      { color: "#6C9BFF", label: "us-west", count: 5 },
+      { color: "#4ADE80", label: "us-east", count: 4 },
+      { color: "#FBBF24", label: "eu-central", count: 4 },
+      { color: "#F87171", label: "ap-south", count: 3 },
+      { color: "#A78BFA", label: "sa-east", count: 2 }
+    ];
+    const legendHtml = legend.map(l =>
+      `<li class="legend-item" onclick="go404()">
+        <span class="legend-dot" style="background:${l.color}"></span>
+        <span class="legend-label">${l.label}</span>
+        <span class="legend-count">${l.count}</span>
+      </li>`
+    ).join("");
+    return `
+      <section class="stats-grid">${statsHtml}</section>
+      <section class="mid-grid">
+        <div class="card">
+          <div class="card-header"><div><h2 class="card-title">Active Inference Jobs</h2><p class="card-sub">Fine-tuning, distillation, deployment</p></div></div>
+          <div class="table-wrapper"><table class="runs-table"><thead><tr><th>Job</th><th>Region</th><th>Type</th><th>Status</th><th>Progress</th><th>Due</th><th>Budget</th></tr></thead><tbody>${rows}</tbody></table></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><h2 class="card-title">Live Feed</h2><p class="card-sub">Model ops & research updates</p></div></div>
+          <ul class="activity-list">${feedHtml}</ul>
+        </div>
+      </section>
+      <section class="bottom-grid">
+        <div class="card">
+          <div class="card-header"><div><h2 class="card-title">AI Team</h2><p class="card-sub">ML engineers & researchers</p></div></div>
+          <ul class="team-list">${teamHtml}</ul>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><h2 class="card-title">Upcoming Milestones</h2><p class="card-sub">Next 60 days</p></div></div>
+          <ul class="milestone-list">${msHtml}</ul>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><h2 class="card-title">Job Distribution</h2><p class="card-sub">By region</p></div></div>
+          <div class="donut-chart" onclick="go404()">
+            <svg viewBox="0 0 120 120" class="donut-svg">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#1B2128" stroke-width="16"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#6C9BFF" stroke-width="16" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#4ADE80" stroke-width="16" stroke-dashoffset="-62" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#FBBF24" stroke-width="16" stroke-dashoffset="-108" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#F87171" stroke-width="16" stroke-dashoffset="-148" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#A78BFA" stroke-width="16" stroke-dashoffset="-182" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <text x="60" y="56" text-anchor="middle" class="donut-num">5</text>
+              <text x="60" y="68" text-anchor="middle" class="donut-label">Regions</text>
+            </svg>
+          </div>
+          <ul class="legend-list">${legendHtml}</ul>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderRuns() {
+    const statuses = ["All", "Active", "Ramping Up", "Review", "Completed"];
+    const filtered = state.runFilter === "All" ? productionRuns : productionRuns.filter(e => e.status === state.runFilter);
+    const stats = [
+      { icon: "⊞", value: productionRuns.length, label: "Total Jobs", bar: 100, accent: true },
+      { icon: "◉", value: productionRuns.filter(e => e.status === "Active").length, label: "Active Now", bar: 60 },
+      { icon: "▤", value: productionRuns.filter(e => e.status === "Ramping Up").length, label: "Ramping Up", bar: 40 },
+      { icon: "✓", value: productionRuns.filter(e => e.status === "Completed").length, label: "Completed", bar: 20 }
+    ];
+    const statsHtml = stats.map((s, i) =>
+      `<div class="stat-card ${s.accent ? "stat-accent" : ""}" onclick="go404()">
+        <div class="stat-top"><span class="stat-icon">${s.icon}</span></div>
+        <div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-w="${[100,60,40,20][i]}"></div></div>
+      </div>`
+    ).join("");
+    const filterHtml = statuses.map(s =>
+      `<button class="btn-outline run-filter-btn ${state.runFilter === s ? "btn-active" : ""}" data-filter="${s}">${s}</button>`
+    ).join("");
+    const rows = filtered.map(t =>
+      `<tr onclick="go404()">
+        <td><div class="t-name">${t.name}</div><div class="t-sub">${t.site}</div></td>
+        <td>${regionTag(t.facility)}</td>
+        <td class="type-col">${t.type}</td>
+        <td><span class="status-badge ${statusColors[t.status]}">${t.status}</span></td>
+        <td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" data-w="${t.progress}"></div></div><span class="progress-pct">${t.progress}%</span></div></td>
+        <td class="date-col" style="font-size:12px">${t.manager}</td>
+        <td class="date-col">${t.endDate}</td>
+        <td class="budget-col">${t.budget}</td>
+      </tr>`
+    ).join("");
+    return `
+      <section class="stats-grid">${statsHtml}</section>
+      <div class="card">
+        <div class="card-header"><div><h2 class="card-title">All Inference Jobs</h2><p class="card-sub">Full list of model ops</p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">${filterHtml}</div></div>
+        <div class="table-wrapper"><table class="runs-table"><thead><tr><th>Job</th><th>Region</th><th>Type</th><th>Status</th><th>Progress</th><th>Manager</th><th>Due</th><th>Budget</th></tr></thead><tbody>${rows}</tbody></table></div>
+      </div>
+    `;
+  }
+
+  function renderTeams() {
+    const stats = [
+      { icon: "⊚", value: accountTeam.length, label: "Team Members", bar: 80, accent: true },
+      { icon: "◉", value: accountTeam.filter(m => m.status === "active").length, label: "Online Now", bar: 85 },
+      { icon: "⊞", value: accountTeam.reduce((a, m) => a + m.projects, 0), label: "Active Projects", bar: 70 },
+      { icon: "▤", value: Math.round(accountTeam.reduce((a, m) => a + m.experience, 0) / accountTeam.length), label: "Avg. Yrs", bar: 75 }
+    ];
+    const statsHtml = stats.map(s =>
+      `<div class="stat-card ${s.accent ? "stat-accent" : ""}" onclick="go404()">
+        <div class="stat-top"><span class="stat-icon">${s.icon}</span></div>
+        <div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-w="${s.bar}"></div></div>
+      </div>`
+    ).join("");
+    const cards = accountTeam.map(m =>
+      `<div class="team-card" style="background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;min-width:0;transition:border-color .2s ease, transform .2s ease;" onclick="go404()">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+          <div class="member-avatar" style="width:46px;height:46px;font-size:14px">${m.avatar}<span class="online-dot dot-${m.status}"></span></div>
+          <div><div class="member-name" style="font-size:15px">${m.name}</div><div class="member-role">${m.role}</div></div>
+        </div>
+        <div style="font-size:12.5px;color:var(--text-dim);line-height:1.9">
+          <div>🎯 ${m.speciality}</div>
+          <div>✉️ ${m.email}</div>
+          <div>📂 ${m.projects} active project${m.projects !== 1 ? "s" : ""} · ${m.experience} yrs</div>
+        </div>
+      </div>`
+    ).join("");
+    return `
+      <section class="stats-grid">${statsHtml}</section>
+      <div class="card"><div class="card-header"><div><h2 class="card-title">AI Team</h2><p class="card-sub">ML engineers & researchers</p></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;">${cards}</div></div>
+    `;
+  }
+
+  function renderProducts() {
+    const q = state.productSearch.toLowerCase();
+    const filtered = productCatalog.filter(a => a.name.toLowerCase().includes(q) || a.facility.toLowerCase().includes(q));
+    const stats = [
+      { icon: "⊚", value: "2,847", label: "Total Models", bar: 75, accent: true },
+      { icon: "◉", value: "142", label: "In QA", bar: 55 },
+      { icon: "◈", value: "89", label: "Featured", bar: 30 },
+      { icon: "▤", value: "34", label: "Retooling", bar: 20 }
+    ];
+    const statsHtml = stats.map(s =>
+      `<div class="stat-card ${s.accent ? "stat-accent" : ""}" onclick="go404()">
+        <div class="stat-top"><span class="stat-icon">${s.icon}</span></div>
+        <div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-w="${s.bar}"></div></div>
+      </div>`
+    ).join("");
+    const badgeBg = { "Bestseller": "rgba(108,155,255,0.18)", "Active": "rgba(74,222,128,0.12)", "Retooled": "rgba(251,191,36,0.12)" };
+    const badgeColor = { "Bestseller": "#93BBFF", "Active": "#6EE7A7", "Retooled": "#FCD34D" };
+    const rows = filtered.map(a =>
+      `<tr onclick="go404()">
+        <td class="type-col" style="font-size:11.5px;font-family:var(--mono)">${a.id}</td>
+        <td><div class="t-name">${a.name}</div><div class="t-sub">${a.facility}</div></td>
+        <td class="date-col">${a.category}</td>
+        <td class="date-col">${a.date}</td>
+        <td><span style="color:${stockColor[a.stock]};font-weight:700;font-size:12px">${a.stock}</span></td>
+        <td><span class="status-badge" style="background:${badgeBg[a.status]};color:${badgeColor[a.status]}">${a.status}</span></td>
+      </tr>`
+    ).join("");
+    return `
+      <section class="stats-grid">${statsHtml}</section>
+      <div class="card">
+        <div class="card-header"><div><h2 class="card-title">Model Registry</h2><p class="card-sub">Fine-tuned & quantized models</p></div>
+        <div class="search-box" style="flex:0 0 auto"><span class="search-icon">⚡</span><input id="product-search-input" placeholder="Search models…" value="${state.productSearch}"></div></div>
+        <div class="table-wrapper"><table class="runs-table"><thead><tr><th>Model ID</th><th>Name</th><th>Category</th><th>Launched</th><th>Status</th><th>Tag</th></tr></thead><tbody>${rows}</tbody></table></div>
+      </div>
+    `;
+  }
+
+  function renderReports() {
+    const stats = [
+      { icon: "◉", value: qualityReports.length, label: "Total Papers", bar: 80, accent: true },
+      { icon: "✓", value: qualityReports.filter(p => p.status === "Published").length, label: "Published", bar: 70 },
+      { icon: "◷", value: qualityReports.filter(p => p.status === "In Review").length, label: "In Review", bar: 20 },
+      { icon: "◈", value: qualityReports.reduce((a, p) => a + p.reads, 0), label: "Total Reads", bar: 60 }
+    ];
+    const statsHtml = stats.map(s =>
+      `<div class="stat-card ${s.accent ? "stat-accent" : ""}" onclick="go404()">
+        <div class="stat-top"><span class="stat-icon">${s.icon}</span></div>
+        <div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-w="${s.bar}"></div></div>
+      </div>`
+    ).join("");
+    const cards = qualityReports.map(p =>
+      `<div class="research-card" style="background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:border-color .2s ease, transform .2s ease;" onclick="go404()">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:180px">
+            <div style="font-weight:700;color:#fff;font-size:14px;margin-bottom:4px">${p.title}</div>
+            <div style="font-size:12.5px;color:var(--text-dim);margin-bottom:6px">${p.authors}</div>
+            <div style="font-size:12px;color:var(--text-dimmer)">${p.journal} · ${p.year}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+            <span style="background:${reportStatusColor[p.status]}22;color:${reportStatusColor[p.status]};border-radius:999px;padding:3px 10px;font-family:var(--mono);font-size:10.5px;font-weight:700;text-transform:uppercase">${p.status}</span>
+            ${p.reads > 0 ? `<span style="font-size:12px;color:var(--text-dim)">📊 ${p.reads} reads</span>` : ''}
+          </div>
+        </div>
+      </div>`
+    ).join("");
+    return `
+      <section class="stats-grid">${statsHtml}</section>
+      <div class="card"><div class="card-header"><div><h2 class="card-title">Research & Benchmarks</h2><p class="card-sub">White papers and technical reports</p></div></div>
+      <div style="display:flex;flex-direction:column;gap:14px">${cards}</div></div>
+    `;
+  }
+
+  function renderSchedule() {
+    const rows = scheduleEvents.map(ev => {
+      const parts = ev.date.split(" ");
+      let tag = "";
+      if (ev.type === "urgent") tag = `<span class="evt-tag" style="background:rgba(248,113,113,0.18);color:#FCA5A5;font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;flex-shrink:0;text-transform:uppercase;">Urgent</span>`;
+      if (ev.type === "meeting") tag = `<span class="evt-tag" style="background:rgba(108,155,255,0.15);color:#93BBFF;font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;flex-shrink:0;text-transform:uppercase;">Meeting</span>`;
+      return `<div class="schedule-row" style="display:flex;align-items:center;gap:14px;padding:14px 10px;border-radius:10px;cursor:pointer;transition:background .15s ease;" onclick="go404()">
+        <div style="width:50px;flex-shrink:0;text-align:center">
+          <div style="font-family:var(--mono);font-size:10px;font-weight:700;color:${ev.type === 'urgent' ? '#F87171' : '#6C9BFF'};text-transform:uppercase;letter-spacing:0.04em">${parts[0]}</div>
+          <div style="font-family:var(--display);font-size:18px;color:#EDF2F7">${parts[1]}</div>
+        </div>
+        <div style="width:3px;align-self:stretch;border-radius:999px;background:${ev.type === 'urgent' ? '#F87171' : ev.type === 'meeting' ? '#6C9BFF' : '#94A3B8'};opacity:0.7;flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;color:#EDF2F7;font-size:13.5px">${ev.event}</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-top:3px">📍 ${ev.site}</div>
+        </div>${tag}
+      </div>`;
+    }).join("");
+    return `<div class="card"><div class="card-header"><div><h2 class="card-title">Schedule</h2><p class="card-sub">Milestones, reviews, and syncs</p></div></div>
+      <div style="display:flex;flex-direction:column;gap:4px">${rows}</div></div>`;
+  }
+
+  function renderBudget() {
+    const totalAllocated = budgetData.reduce((a, b) => a + b.allocated, 0);
+    const totalSpent = budgetData.reduce((a, b) => a + b.spent, 0);
+    const utilRate = Math.round((totalSpent / totalAllocated) * 100);
+    const stats = [
+      { icon: "⊟", value: "$" + (totalAllocated/1000).toFixed(0) + "K", label: "Allocated", bar: 100, accent: true },
+      { icon: "◉", value: "$" + (totalSpent/1000).toFixed(0) + "K", label: "Spent", bar: utilRate },
+      { icon: "✓", value: "$" + ((totalAllocated-totalSpent)/1000).toFixed(0) + "K", label: "Remaining", bar: Math.round(((totalAllocated-totalSpent)/totalAllocated)*100) },
+      { icon: "◈", value: utilRate + "%", label: "Utilisation", bar: utilRate }
+    ];
+    const statsHtml = stats.map(s =>
+      `<div class="stat-card ${s.accent ? "stat-accent" : ""}" onclick="go404()">
+        <div class="stat-top"><span class="stat-icon">${s.icon}</span></div>
+        <div class="stat-value" style="font-size:22px">${s.value}</div><div class="stat-label">${s.label}</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-w="${s.bar}"></div></div>
+      </div>`
+    ).join("");
+    const rows = budgetData.map(b => {
+      const pct = Math.round((b.spent / b.allocated) * 100);
+      const barGrad = pct > 85 ? "linear-gradient(90deg,#F87171,#FCA5A5)" : "linear-gradient(90deg,#6C9BFF,#93BBFF)";
+      return `<div onclick="go404()" style="cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+          <div><span style="font-weight:700;color:#EDF2F7;font-size:13.5px">${b.site}</span>
+          <span class="region-tag" style="margin-left:10px;color:${facilityAccents[b.facility]};border-color:${facilityAccents[b.facility]};background:${facilityAccents[b.facility]}22;font-size:10.5px">${b.facility}</span></div>
+          <div style="text-align:right;font-size:12.5px;color:var(--text-dim)"><span style="color:#EDF2F7;font-weight:700;font-family:var(--mono)">$${b.spent.toLocaleString()}</span> / $${b.allocated.toLocaleString()}
+          <span style="margin-left:10px;color:${pct > 80 ? "#FCA5A5" : "#93BBFF"};font-weight:700;font-family:var(--mono)">${pct}%</span></div>
+        </div>
+        <div style="height:8px;background:rgba(237,242,247,0.06);border-radius:999px;overflow:hidden">
+          <div class="progress-fill" data-w="${pct}" style="background:${barGrad};height:100%;transition-delay:.3s"></div>
+        </div>
+      </div>`;
+    }).join('<div style="height:18px"></div>');
+    return `
+      <section class="stats-grid">${statsHtml}</section>
+      <div class="card"><div class="card-header"><div><h2 class="card-title">Budget by Project</h2><p class="card-sub">Allocation vs spend</p></div></div>
+      <div>${rows}</div></div>
+    `;
+  }
+
+  function renderSettings() {
+    const s = state.settings;
+    const displayName = currentUsername || currentEmail || "Signed out";
+    const displayEmail = currentEmail || "No account signed in";
+    return `
+      <div class="card"><div class="card-header"><div><h2 class="card-title">Account</h2><p class="card-sub">Profile and session</p></div></div>
+        <div style="display:flex;align-items:center;gap:18px;margin-bottom:20px;flex-wrap:wrap">
+          <div style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(108,155,255,0.4);background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:24px;text-transform:uppercase;flex-shrink:0">${currentInitial}</div>
+          <div><div style="font-weight:700;color:#EDF2F7;font-size:16px;text-transform:capitalize">${displayName}</div>
+          <div style="font-size:13px;color:var(--text-dim);margin-top:2px">${displayEmail}</div>
+          <div style="font-family:var(--mono);font-size:12px;color:#6C9BFF;margin-top:4px">⚙️ ${currentUser ? (currentUser.role === 'admin' ? 'Admin' : 'Partner') : 'Not signed in'}</div></div>
+        </div>
+        <button class="btn-outline" style="border-color:#6C9BFF;color:#6C9BFF" onclick="go404()">Edit Profile</button>
+      </div>
+      <div class="card"><div class="card-header"><div><h2 class="card-title">Preferences</h2><p class="card-sub">Notifications and display</p></div></div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid rgba(237,242,247,0.06)">
+            <div><div style="font-weight:700;color:#EDF2F7;font-size:13.5px">Push Notifications</div><div style="font-size:12.5px;color:var(--text-dim);margin-top:2px">Model status alerts</div></div>
+            <div class="toggle-switch" data-toggle="notifications" style="width:42px;height:24px;border-radius:999px;cursor:pointer;position:relative;flex-shrink:0;transition:background .3s ease;background:${s.notifications ? '#6C9BFF' : 'rgba(237,242,247,0.12)'}">
+              <div class="toggle-knob" style="position:absolute;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:left .3s var(--ease);left:${s.notifications ? '20px' : '3px'}"></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid rgba(237,242,247,0.06)">
+            <div><div style="font-weight:700;color:#EDF2F7;font-size:13.5px">Weekly Digest</div><div style="font-size:12.5px;color:var(--text-dim);margin-top:2px">Summary every Monday</div></div>
+            <div class="toggle-switch" data-toggle="emailDigest" style="width:42px;height:24px;border-radius:999px;cursor:pointer;position:relative;flex-shrink:0;transition:background .3s ease;background:${s.emailDigest ? '#6C9BFF' : 'rgba(237,242,247,0.12)'}">
+              <div class="toggle-knob" style="position:absolute;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:left .3s var(--ease);left:${s.emailDigest ? '20px' : '3px'}"></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid rgba(237,242,247,0.06)">
+            <div><div style="font-weight:700;color:#EDF2F7;font-size:13.5px">Dark Mode</div><div style="font-size:12.5px;color:var(--text-dim);margin-top:2px">Dark theme</div></div>
+            <div class="toggle-switch" data-toggle="darkMode" style="width:42px;height:24px;border-radius:999px;cursor:pointer;position:relative;flex-shrink:0;transition:background .3s ease;background:${s.darkMode ? '#6C9BFF' : 'rgba(237,242,247,0.12)'}">
+              <div class="toggle-knob" style="position:absolute;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:left .3s var(--ease);left:${s.darkMode ? '20px' : '3px'}"></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:18px">
+            <div><div style="font-weight:700;color:#EDF2F7;font-size:13.5px">Language</div><div style="font-size:12.5px;color:var(--text-dim);margin-top:2px">Interface language</div></div>
+            <select class="pref-select" id="lang-select" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 12px;font-size:13px;outline:none;font-family:inherit;">
+              ${["English", "French", "Spanish", "Mandarin", "Portuguese"].map(l => `<option ${s.language === l ? "selected" : ""}>${l}</option>`).join("")}
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="card-header"><div><h2 class="card-title">Session</h2><p class="card-sub">Sign out</p></div></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px">
+          <div style="font-size:12.5px;color:var(--text-dim)">Signed in as <strong style="color:#EDF2F7">${displayEmail}</strong>.</div>
+          <button class="btn-outline" style="border-color:rgba(248,113,113,0.4);color:#FCA5A5;flex-shrink:0" id="settings-logout-btn">⤍ Logout</button>
+        </div>
+      </div>
+      <div class="card"><div class="card-header"><div><h2 class="card-title">Danger Zone</h2><p class="card-sub">Irreversible actions</p></div></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn-outline" style="border-color:rgba(248,113,113,0.4);color:#FCA5A5" onclick="go404()">Reset Password</button>
+          <button class="btn-outline" style="border-color:rgba(248,113,113,0.4);color:#FCA5A5" onclick="go404()">Delete Account</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const pageRenderers = {
+    dashboard: renderDashboard, runs: renderRuns, teams: renderTeams,
+    products: renderProducts, reports: renderReports, schedule: renderSchedule,
+    budget: renderBudget, settings: renderSettings
+  };
+
+  function renderNav() {
+    const mainItems = navItems.slice(0, 3);
+    const mgmtItems = navItems.slice(3);
+    function itemHtml(item) {
+      const badge = item.id === "runs" ? `<span class="nav-badge">8</span>` : "";
+      return `<button class="nav-item ${state.activeNav === item.id ? "nav-active" : ""}" data-nav="${item.id}">
+        <span class="nav-icon">${item.icon}</span><span>${item.label}</span>${badge}</button>`;
+    }
+    document.getElementById("nav-main").innerHTML = mainItems.map(itemHtml).join("");
+    document.getElementById("nav-management").innerHTML = mgmtItems.map(itemHtml).join("");
+  }
+
+  function renderPage() {
+    const page = pageMap[state.activeNav];
+    document.getElementById("page-title-text").textContent = page.title;
+    document.getElementById("page-sub-text").textContent = page.sub;
+    document.getElementById("content-area").innerHTML = pageRenderers[state.activeNav]();
+    renderNav();
+    const settingsLogoutBtn = document.getElementById("settings-logout-btn");
+    if (settingsLogoutBtn) settingsLogoutBtn.addEventListener("click", logout);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    animateStatBars();
+  }
+
+  function navigateTo(id) { state.activeNav = id; closeSidebar(); closeTopbarUserMenu(); renderPage(); }
+  function openSidebar() { document.getElementById("sidebar").classList.add("sidebar-open"); document.getElementById("sidebar-overlay").classList.add("show"); }
+  function closeSidebar() { document.getElementById("sidebar").classList.remove("sidebar-open"); document.getElementById("sidebar-overlay").classList.remove("show"); }
+  function closeTopbarUserMenu() { document.getElementById("topbar-user").classList.remove("open"); }
+
+  document.getElementById("hamburger-btn").addEventListener("click", openSidebar);
+  document.getElementById("close-sidebar-btn").addEventListener("click", closeSidebar);
+  document.getElementById("sidebar-overlay").addEventListener("click", closeSidebar);
+  document.getElementById("notif-btn").addEventListener("click", go404);
+  document.getElementById("logout-btn").addEventListener("click", logout);
+  document.getElementById("topbar-logout-btn").addEventListener("click", logout);
+  document.getElementById("topbar-user-btn").addEventListener("click", function(e) { e.stopPropagation(); document.getElementById("topbar-user").classList.toggle("open"); });
+  document.addEventListener("click", closeTopbarUserMenu);
+
+  document.addEventListener("click", function(e) {
+    const navBtn = e.target.closest("[data-nav]");
+    if (navBtn) { navigateTo(navBtn.getAttribute("data-nav")); return; }
+    const filterBtn = e.target.closest(".run-filter-btn");
+    if (filterBtn) { state.runFilter = filterBtn.getAttribute("data-filter"); renderPage(); return; }
+    const toggle = e.target.closest("[data-toggle]");
+    if (toggle) {
+      const key = toggle.getAttribute("data-toggle");
+      state.settings[key] = !state.settings[key];
+      renderPage();
+      return;
+    }
+  });
+  document.addEventListener("input", function(e) {
+    if (e.target && e.target.id === "product-search-input") {
+      state.productSearch = e.target.value;
+      const caretPos = e.target.selectionStart;
+      renderPage();
+      const input = document.getElementById("product-search-input");
+      if (input) { input.focus(); input.setSelectionRange(caretPos, caretPos); }
+    }
+  });
+  document.addEventListener("change", function(e) {
+    if (e.target && e.target.id === "lang-select") state.settings.language = e.target.value;
+  });
+
+  paintUserChrome();
+  renderPage();
+</script>
+</body>
+</html>

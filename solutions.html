@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signal — Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0B0E14;
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: #F6F4EE;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    :root {
+      --ink: #0B0E14;
+      --ink-soft: #131722;
+      --ink-soft-2: #171C29;
+      --paper: #F6F4EE;
+      --coral: #FF6B47;
+      --amber: #FFC24B;
+      --line: rgba(246,244,238,0.12);
+      --text-dim: rgba(246,244,238,0.62);
+      --display: 'Space Grotesk', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+      --body-font: 'IBM Plex Sans', sans-serif;
+    }
+
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+    #header-container {
+      border-bottom: 1px solid var(--line);
+      background: var(--ink);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    #footer-container {
+      border-top: 1px solid var(--line);
+      background: var(--ink-soft);
+      margin-top: 60px;
+    }
+
+    .solutions-hero {
+      position: relative;
+      padding: 80px 0 60px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background: radial-gradient(circle at 80% 20%, rgba(255,107,71,0.06), transparent 60%);
+    }
+    .solutions-hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,194,75,0.06), transparent 60%);
+      animation: floatPulse 12s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes floatPulse {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+      50% { transform: translate(40px, -30px) scale(1.2); opacity: 1; }
+    }
+    .solutions-hero .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .solutions-hero h1 {
+      font-family: var(--display);
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      animation: fadeSlideUp 1s ease both;
+    }
+    .solutions-hero h1 em {
+      background: linear-gradient(135deg, var(--coral), var(--amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% auto;
+      animation: gradientShift 6s ease-in-out infinite;
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .solutions-hero p {
+      color: var(--text-dim);
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 20px 0 32px;
+      max-width: 48ch;
+      animation: fadeSlideUp 1s ease 0.2s both;
+    }
+    .solutions-hero .hero-stats {
+      display: flex;
+      gap: 40px;
+      animation: fadeSlideUp 1s ease 0.3s both;
+    }
+    .solutions-hero .hero-stats div b {
+      display: block;
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--paper), var(--text-dim));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .solutions-hero .hero-stats div span {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+    }
+    .solutions-hero .hero-visual {
+      position: relative;
+      animation: fadeSlideUp 1s ease 0.4s both;
+    }
+    .solutions-hero .hero-visual img {
+      width: 100%;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      transition: transform 0.6s ease;
+    }
+    .solutions-hero .hero-visual:hover img { transform: scale(1.02) rotate(-1deg); }
+    .solutions-hero .floating-badge {
+      position: absolute;
+      background: rgba(19,23,34,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      animation: floatBadge 4s ease-in-out infinite;
+    }
+    .solutions-hero .floating-badge:nth-child(2) { top: -10px; right: -10px; animation-delay: 1s; }
+    .solutions-hero .floating-badge:nth-child(3) { bottom: 20px; left: -20px; animation-delay: 2s; }
+    .solutions-hero .floating-badge b { color: var(--paper); display: block; font-size: 0.9rem; }
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .solution-areas {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .section-label::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--amber);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(255,194,75,0.15);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(255,194,75,0.15); }
+      50% { box-shadow: 0 0 0 8px rgba(255,194,75,0.05); }
+    }
+    .solution-areas h2 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .solution-areas .subtitle {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      max-width: 50ch;
+      margin-bottom: 48px;
+    }
+    .solution-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .solution-card {
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 36px 32px;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+    .solution-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--coral), var(--amber));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+    .solution-card:hover::before { transform: scaleX(1); }
+    .solution-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(255,107,71,0.3);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .solution-card .icon {
+      font-size: 2.2rem;
+      color: var(--coral);
+      margin-bottom: 16px;
+      display: inline-block;
+      transition: transform 0.5s ease;
+    }
+    .solution-card:hover .icon { transform: rotateY(180deg) scale(1.1); }
+    .solution-card h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 600; margin-bottom: 8px; }
+    .solution-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
+    .solution-card .tag {
+      display: inline-block;
+      margin-top: 16px;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--amber);
+      border: 1px solid rgba(255,194,75,0.3);
+      padding: 4px 14px;
+      border-radius: 40px;
+      transition: all 0.3s ease;
+    }
+    .solution-card:hover .tag {
+      background: var(--amber);
+      color: var(--ink);
+      border-color: var(--amber);
+    }
+
+    .industry-solutions {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+      background: radial-gradient(circle at 30% 50%, rgba(255,194,75,0.03), transparent 60%);
+    }
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .industry-card {
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .industry-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--coral), var(--amber));
+      transform: scaleX(0);
+      transition: transform 0.5s ease;
+    }
+    .industry-card:hover::after { transform: scaleX(1); }
+    .industry-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,107,71,0.3);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .industry-card img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 16px;
+      border: 2px solid var(--line);
+      transition: transform 0.5s ease;
+    }
+    .industry-card:hover img { transform: scale(1.1) rotate(-5deg); }
+    .industry-card h4 { font-family: var(--display); font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+    .industry-card p { color: var(--text-dim); font-size: 0.92rem; line-height: 1.6; }
+
+    .success-metrics {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 40px;
+    }
+    .metric-item {
+      background: var(--ink-soft);
+      padding: 40px 24px;
+      text-align: center;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--coral), var(--amber));
+      transform: scaleX(0);
+      transition: transform 0.5s ease;
+    }
+    .metric-item:hover::after { transform: scaleX(1); }
+    .metric-item:hover {
+      transform: translateY(-4px);
+      background: var(--ink-soft-2);
+    }
+    .metric-item .number {
+      display: block;
+      font-family: var(--display);
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--paper), var(--text-dim));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    .metric-item:hover .number {
+      background: linear-gradient(135deg, var(--coral), var(--amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .metric-item .label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+    }
+
+    .case-studies {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--ink-soft);
+    }
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 40px;
+    }
+    .case-card {
+      background: var(--ink-soft-2);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: block;
+      cursor: pointer;
+    }
+    .case-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--coral);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .case-card .case-image {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    .case-card .case-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .case-card:hover .case-image img { transform: scale(1.08); }
+    .case-card .case-image .case-tag {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(255,107,71,0.9);
+      color: var(--ink);
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-weight: 600;
+    }
+    .case-card .case-body {
+      padding: 28px;
+    }
+    .case-card .case-body h4 {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .case-card .case-body p {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .case-card .case-body .case-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-family: var(--mono);
+    }
+    .case-card .case-body .case-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .cta-section {
+      padding: 80px 0;
+      background:
+        linear-gradient(135deg, rgba(23,28,41,0.95), rgba(23,28,41,0.85)),
+        url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(255,107,71,0.06), transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(255,194,75,0.06), transparent 50%);
+      animation: rotateGlow 30s linear infinite;
+    }
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .cta-section .cta-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .cta-section h2 {
+      font-family: var(--display);
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .cta-section h2 em {
+      background: linear-gradient(135deg, var(--coral), var(--amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-section p {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+    .cta-section .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta-section .btn-primary-lg {
+      padding: 16px 36px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      background: var(--paper);
+      color: var(--ink);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cta-section .btn-primary-lg:hover {
+      transform: scale(1.06) translateY(-3px);
+      box-shadow: 0 16px 48px rgba(246,244,238,0.2);
+    }
+    .cta-section .btn-ghost-lg {
+      padding: 16px 36px;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: var(--paper);
+      border: 1px solid var(--line);
+      transition: all 0.4s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cta-section .btn-ghost-lg:hover {
+      border-color: var(--paper);
+      background: rgba(255,255,255,0.05);
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 1024px) {
+      .solutions-hero .grid-2 { grid-template-columns: 1fr; }
+      .solution-grid { grid-template-columns: 1fr; }
+      .industry-grid { grid-template-columns: 1fr 1fr; }
+      .case-grid { grid-template-columns: 1fr 1fr; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 660px) {
+      .industry-grid { grid-template-columns: 1fr; }
+      .case-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .solutions-hero .hero-stats { flex-direction: column; gap: 16px; }
+      .solutions-hero .floating-badge { display: none; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header-container"></div>
+
+  <section class="solutions-hero">
+    <div class="wrap">
+      <div class="grid-2">
+        <div>
+          <div class="section-label">Solutions Overview</div>
+          <h1>AI solutions for <em>every team</em></h1>
+          <p>From operations to engineering, Signal helps you turn data into action — no matter your role or industry.</p>
+          <div class="hero-stats">
+            <div><b>340+</b><span>Teams served</span></div>
+            <div><b>60+</b><span>Integrations</span></div>
+            <div><b>4.2M</b><span>Events daily</span></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img src="./assets/AI10.webp" alt="Team collaborating on data solutions" />
+          <div class="floating-badge" style="top:-10px;right:-10px;">
+            <b>🚀 340+</b>
+            Active teams
+          </div>
+          <div class="floating-badge" style="bottom:20px;left:-20px;">
+            <b>⚡ 18ms</b>
+            Avg response
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="solution-areas">
+    <div class="wrap">
+      <div class="section-label">Solution Areas</div>
+      <h2>Built for every <em>department</em></h2>
+      <p class="subtitle">Signal adapts to your team's needs, providing actionable insights for every role.</p>
+      <div class="solution-grid">
+        <div class="solution-card reveal">
+          <div class="icon"><i class="fas fa-chart-pie"></i></div>
+          <h3>Operations</h3>
+          <p>Detect supply chain disruptions, revenue drops, and performance shifts before they impact your business.</p>
+          <span class="tag">Real-time alerts</span>
+        </div>
+        <div class="solution-card reveal">
+          <div class="icon"><i class="fas fa-code"></i></div>
+          <h3>Engineering</h3>
+          <p>Monitor system health, deploy anomaly detection, and build custom workflows with our APIs and SDKs.</p>
+          <span class="tag">Developer-first</span>
+        </div>
+        <div class="solution-card reveal">
+          <div class="icon"><i class="fas fa-users"></i></div>
+          <h3>Product</h3>
+          <p>Understand user behavior, track feature adoption, and get plain-language insights to guide your roadmap.</p>
+          <span class="tag">Product analytics</span>
+        </div>
+        <div class="solution-card reveal">
+          <div class="icon"><i class="fas fa-flag"></i></div>
+          <h3>Marketing</h3>
+          <p>Measure campaign performance, attribution, and ROI with automated insights and forecasting.</p>
+          <span class="tag">Marketing intelligence</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="industry-solutions">
+    <div class="wrap">
+      <div class="section-label">Industries</div>
+      <h2 style="font-family:var(--display);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;">Trusted across <em style="background:linear-gradient(135deg,var(--coral),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">leading industries</em></h2>
+      <p style="color:var(--text-dim);font-size:1.05rem;max-width:50ch;">Signal's AI solutions are used by companies of all sizes, from startups to enterprises.</p>
+      <div class="industry-grid">
+        <div class="industry-card reveal">
+          <img src="./assets/AI11.webp" alt="Logistics industry" />
+          <h4>Logistics & Supply Chain</h4>
+          <p>Predict disruptions, optimize routes, and reduce costs with real-time intelligence.</p>
+        </div>
+        <div class="industry-card reveal">
+          <img src="./assets/AI12.webp" alt="Technology industry" />
+          <h4>Technology & SaaS</h4>
+          <p>Monitor system health, user behavior, and revenue metrics in real-time.</p>
+        </div>
+        <div class="industry-card reveal">
+          <img src="./assets/AI13.webp" alt="Healthcare industry" />
+          <h4>Healthcare</h4>
+          <p>Detect anomalies in patient data, optimize operations, and improve outcomes.</p>
+        </div>
+        <div class="industry-card reveal">
+          <img src="./assets/AI14.webp" alt="Retail industry" />
+          <h4>Retail & E-commerce</h4>
+          <p>Track sales trends, inventory levels, and customer behavior in real-time.</p>
+        </div>
+        <div class="industry-card reveal">
+          <img src="./assets/AI15.webp" alt="Finance industry" />
+          <h4>Finance & Banking</h4>
+          <p>Detect fraud, monitor transactions, and ensure regulatory compliance.</p>
+        </div>
+        <div class="industry-card reveal">
+          <img src="./assets/AI16.webp" alt="Startup industry" />
+          <h4>Startups & Scale-ups</h4>
+          <p>Scale your data capabilities without hiring a dedicated data science team.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="success-metrics">
+    <div class="wrap">
+      <div class="section-label">Impact</div>
+      <h2 style="font-family:var(--display);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;">Measurable <em style="background:linear-gradient(135deg,var(--coral),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">results</em> for our customers</h2>
+      <p style="color:var(--text-dim);font-size:1.05rem;max-width:50ch;">Teams using Signal see significant improvements in their operations.</p>
+      <div class="metrics-grid">
+        <div class="metric-item"><span class="number">67%</span><span class="label">Faster incident response</span></div>
+        <div class="metric-item"><span class="number">42%</span><span class="label">Reduction in downtime</span></div>
+        <div class="metric-item"><span class="number">89%</span><span class="label">Team satisfaction</span></div>
+        <div class="metric-item"><span class="number">3.2x</span><span class="label">ROI within 6 months</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="case-studies">
+    <div class="wrap">
+      <div class="section-label">Case Studies</div>
+      <h2 style="font-family:var(--display);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;">Real stories from <em style="background:linear-gradient(135deg,var(--coral),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">real teams</em></h2>
+      <p style="color:var(--text-dim);font-size:1.05rem;max-width:50ch;">See how Signal has transformed businesses across industries.</p>
+      <div class="case-grid">
+        <a href="404.html" class="case-card reveal">
+          <div class="case-image">
+            <img src="./assets/AI17.webp" alt="Vertex Logistics case study" />
+            <span class="case-tag">Logistics</span>
+          </div>
+          <div class="case-body">
+            <h4>Vertex Logistics</h4>
+            <p>How Signal helped Vertex reduce delivery delays by 34% with real-time anomaly detection.</p>
+            <div class="case-meta">
+              <span><i class="far fa-clock"></i> 5 min read</span>
+              <span><i class="far fa-calendar"></i> Dec 12, 2026</span>
+            </div>
+          </div>
+        </a>
+        <a href="404.html" class="case-card reveal">
+          <div class="case-image">
+            <img src="./assets/AI18.webp" alt="Orbit Retail case study" />
+            <span class="case-tag">Retail</span>
+          </div>
+          <div class="case-body">
+            <h4>Orbit Retail</h4>
+            <p>Orbit used Signal to boost revenue by 28% through intelligent inventory forecasting.</p>
+            <div class="case-meta">
+              <span><i class="far fa-clock"></i> 4 min read</span>
+              <span><i class="far fa-calendar"></i> Dec 8, 2026</span>
+            </div>
+          </div>
+        </a>
+        <a href="404.html" class="case-card reveal">
+          <div class="case-image">
+            <img src="./assets/AI20.webp" alt="Ferrovia case study" />
+            <span class="case-tag">Transportation</span>
+          </div>
+          <div class="case-body">
+            <h4>Ferrovia</h4>
+            <p>Ferrovia optimized their entire logistics network using Signal's predictive analytics.</p>
+            <div class="case-meta">
+              <span><i class="far fa-clock"></i> 6 min read</span>
+              <span><i class="far fa-calendar"></i> Dec 5, 2026</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="wrap">
+      <div class="cta-content">
+        <div class="section-label" style="justify-content:center;">Ready to Get Started</div>
+        <h2>Find the perfect <em>solution</em> for your team</h2>
+        <p>Join hundreds of teams already using Signal to turn their data into actionable insights.</p>
+        <div class="cta-buttons">
+          <a href="404.html" class="btn-primary-lg"><i class="fas fa-rocket"></i> Start free trial</a>
+          <a href="404.html" class="btn-ghost-lg"><i class="fas fa-play-circle"></i> Watch demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-container"></div>
+
+  <script>
+    function loadComponent(elementId, filePath, fallbackMessage) {
+      fetch(filePath)
+        .then(response => {
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById(elementId).innerHTML = data;
+          if (elementId === 'header-container') {
+            setActiveNavLink();
+          }
+        })
+        .catch(error => {
+          console.error(`Error loading ${filePath}:`, error);
+          document.getElementById(elementId).innerHTML = `<div style="background:#0B0E14;padding:20px;text-align:center;border-bottom:1px solid rgba(246,244,238,0.12);"><p style="color:#F6F4EE;">⚠️ ${fallbackMessage || 'Failed to load component'}</p></div>`;
+        });
+    }
+
+    function setActiveNavLink() {
+      const currentPage = window.location.pathname.split('/').pop() || 'solutions.html';
+      const navLinks = document.querySelectorAll('#header-container .nav-links a');
+      
+      navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+        if (linkHref === currentPage) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    loadComponent('header-container', 'header.html', 'Header failed to load. Please check that header.html exists.');
+    loadComponent('footer-container', 'footer.html', 'Footer failed to load. Please check that footer.html exists.');
+
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('.solutions-hero, .solution-areas, .industry-solutions, .success-metrics, .case-studies, .cta-section');
+      sections.forEach((section, index) => {
+        section.classList.add('reveal');
+        if (index === 0) section.classList.add('active');
+        revealObserver.observe(section);
+      });
+    });
+
+    console.log('🚀 Signal Solutions Page Loaded');
+  </script>
+
+</body>
+</html>

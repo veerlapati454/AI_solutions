@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal — Footer</title>
+<style>
+  :root{
+    --ink: #0B0E14;
+    --ink-soft: #131722;
+    --paper: #F6F4EE;
+    --coral: #FF6B47;
+    --amber: #FFC24B;
+    --line: rgba(246,244,238,0.12);
+    --text-dim: rgba(246,244,238,0.62);
+    --display: 'Space Grotesk', 'Segoe UI', sans-serif;
+    --body: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ background:var(--ink); font-family:var(--body); color:var(--paper); }
+  a{ color:inherit; text-decoration:none; }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:-0.01em;
+  }
+  
+  /* Logo image placeholder */
+  .logo-placeholder {
+    display: block;
+    width: 130px;
+    height: auto;
+    max-height: 40px;
+    object-fit: contain;
+    filter: brightness(0) invert(1); /* Makes dark logo white - remove if you have colored logo */
+  }
+
+  .site-footer{
+    background:var(--ink-soft);
+    border-top:1px solid var(--line);
+    padding:72px 32px 0;
+  }
+
+  .footer-inner{ max-width:1180px; margin:0 auto; }
+
+  .footer-top{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1.2fr;
+    gap:40px;
+    padding-bottom:56px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .footer-brand p{
+    color:var(--text-dim);
+    font-size:0.92rem;
+    line-height:1.6;
+    margin-top:14px;
+    max-width:34ch;
+  }
+
+  /* Address styles */
+  .footer-address {
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    line-height: 1.8;
+    margin-top: 14px;
+    font-style: normal;
+  }
+  .footer-address strong {
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  .footer-col h4{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:18px;
+    font-weight:500;
+  }
+
+  .footer-col ul{ list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .footer-col a{ font-size:0.92rem; color:var(--text-dim); transition:color .18s ease; }
+  .footer-col a:hover{ color:var(--paper); }
+
+  .footer-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--mono);
+    font-size:0.78rem;
+    color:var(--text-dim);
+    margin-top:14px;
+  }
+  .footer-status::before{
+    content:"";
+    width:7px; height:7px;
+    border-radius:50%;
+    background:#4ADE80;
+    box-shadow:0 0 0 4px rgba(74,222,128,0.16);
+  }
+
+  .newsletter form{
+    display:flex;
+    border:1px solid var(--line);
+    border-radius:100px;
+    overflow:hidden;
+    margin-top:14px;
+  }
+  .newsletter input{
+    flex:1;
+    background:none;
+    border:none;
+    outline:none;
+    padding:12px 16px;
+    color:var(--paper);
+    font-family:var(--body);
+    font-size:0.88rem;
+  }
+  .newsletter input::placeholder{ color:var(--text-dim); }
+  .newsletter button{
+    background:var(--coral);
+    color:var(--ink);
+    border:none;
+    padding:0 20px;
+    font-family:var(--body);
+    font-weight:600;
+    font-size:0.88rem;
+    cursor:pointer;
+    transition:background .18s ease;
+  }
+  .newsletter button:hover{ background:var(--amber); }
+
+  .footer-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:26px 0;
+    font-size:0.82rem;
+    color:var(--text-dim);
+    flex-wrap:wrap;
+    gap:16px;
+  }
+
+  .footer-legal{ display:flex; gap:24px; }
+  .footer-legal a:hover{ color:var(--paper); }
+
+  .footer-social{ display:flex; gap:14px; }
+  .footer-social a{
+    width:34px; height:34px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color .18s ease, color .18s ease;
+  }
+  .footer-social a:hover{ border-color:var(--coral); color:var(--coral); }
+
+  @media (max-width: 860px){
+    .footer-top{ grid-template-columns:1fr 1fr; }
+    .footer-brand{ grid-column:1 / -1; }
+  }
+  @media (max-width: 520px){
+    .footer-top{ grid-template-columns:1fr; }
+    .footer-bottom{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <!-- Column 1: Brand + Description + Status -->
+      <div class="footer-brand">
+        <a href="index.html" class="brand">
+          <!-- Image placeholder for logo - replace src with your logo -->
+          <img 
+            class="logo-placeholder" 
+            src="./assets/stackly_logo.webp" 
+            alt="Company logo"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div style="display:none; width:130px; height:36px; background:#FF6B47; border-radius:6px; align-items:center; justify-content:center; font-weight:600; font-size:0.9rem; color:#0B0E14; font-family:'IBM Plex Sans', sans-serif;">
+            LOGO
+          </div>
+        </a>
+        <p>Operational intelligence for teams who'd rather act on data than argue about it. Built for engineering, ops, and revenue teams.</p>
+        <div class="footer-status">All systems operational</div>
+      </div>
+
+      <!-- Column 2: Quick Links (from header) -->
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="platform.html">Platform</a></li>
+          <li><a href="solutions.html">Solutions</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="company.html">Company</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Address + Newsletter -->
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <address class="footer-address">
+          <strong>Stackly, Inc.</strong><br />
+          123 Tech Park Drive<br />
+          Hyderabad<br />
+          <span style="color:var(--text-dim);">India</span>
+        </address>
+        
+        
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Stackly, Inc. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Security</a>
+      </div>
+      <div class="footer-social">
+        <a href="404.html" aria-label="X / Twitter">𝕏</a>
+        <a href="404.html" aria-label="GitHub">gh</a>
+        <a href="404.html" aria-label="LinkedIn">in</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

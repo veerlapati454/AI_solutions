@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signal — Header</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ----- reset & base ----- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0B0E14;
+      font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+      color: #F6F4EE;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ----- header & nav ----- */
+    .site-header {
+      background: #0B0E14;
+      border-bottom: 1px solid rgba(246,244,238,0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 32px;
+    }
+
+    /* ----- brand: logo placeholder (no text) ----- */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.01em;
+    }
+    .brand-text {
+      display: none;
+    }
+
+    .logo-placeholder {
+      display: block;
+      width: 130px;
+      height: auto;
+      max-height: 40px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+      font-size: 0.94rem;
+      color: rgba(246,244,238,0.62);
+      align-items: center;
+    }
+    .nav-links a { 
+      transition: color .18s ease;
+      position: relative;
+      padding: 4px 0;
+    }
+    
+    /* Active link underline effect - ONLY for active links */
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #FF6B47, #FFC24B);
+    }
+    
+    .nav-links a:hover {
+      color: #F6F4EE;
+    }
+    
+    .nav-links a.active {
+      color: #F6F4EE;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nav-login {
+      font-size: 0.9rem;
+      color: rgba(246,244,238,0.62);
+    }
+    .nav-login:hover { color: #F6F4EE; }
+
+    .btn-cta {
+      font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      background: #FF6B47;
+      color: #0B0E14;
+      padding: 10px 20px;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .btn-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(255,107,71,0.35);
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 1px solid rgba(246,244,238,0.12);
+      border-radius: 8px;
+      width: 38px; height: 38px;
+      color: #F6F4EE;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 860px) {
+      .nav-links, .nav-login { display: none; }
+      .menu-toggle { display: block; }
+    }
+
+    @media (max-width: 480px) {
+      .logo-placeholder {
+        width: 100px;
+        max-height: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <!-- BRAND: only the image placeholder -->
+    <a href="index.html" class="brand">
+      <img 
+        class="logo-placeholder" 
+        src='./assets/stackly_logo.webp' width='200' height='50' viewBox='0 0 200 50'%3E%3Crect width='200' height='50' fill='%23FF6B47' rx='8'/%3E%3Ctext x='20' y='32' font-family='system-ui, sans-serif' font-size='20' font-weight='700' fill='%230B0E14'%3EYOUR LOGO%3C/text%3E%3C/svg%3E"
+        alt="Your logo placeholder"
+      />
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="platform.html">Platform</a></li>
+      <li><a href="solutions.html">Solutions</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="docs.html">Docs</a></li>
+      <li><a href="company.html">Company</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn-cta">Sign in</a>
+    </div>
+
+    <button class="menu-toggle" aria-label="Open menu">☰</button>
+  </nav>
+</header>
+
+<script>
+  // Immediately invoked function to highlight active link
+  (function setActiveNavLink() {
+    // Get the current page filename (e.g., "platform.html", "index.html")
+    let currentPage = window.location.pathname.split('/').pop();
+    
+    // If no page is specified (root domain), default to index.html
+    if (!currentPage || currentPage === '') {
+      currentPage = 'index.html';
+    }
+    
+    // Get all navigation links
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    // Loop through each link and add 'active' class if it matches current page
+    navLinks.forEach(link => {
+      const linkHref = link.getAttribute('href');
+      if (linkHref === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

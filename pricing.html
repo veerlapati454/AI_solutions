@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signal — Pricing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0B0E14;
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: #F6F4EE;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    :root {
+      --ink: #0B0E14;
+      --ink-soft: #131722;
+      --ink-soft-2: #171C29;
+      --paper: #F6F4EE;
+      --coral: #FF6B47;
+      --amber: #FFC24B;
+      --line: rgba(246,244,238,0.12);
+      --text-dim: rgba(246,244,238,0.62);
+      --display: 'Space Grotesk', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+    #header-container {
+      border-bottom: 1px solid var(--line);
+      background: var(--ink);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    #footer-container {
+      border-top: 1px solid var(--line);
+      background: var(--ink-soft);
+      margin-top: 60px;
+    }
+
+    /* Section 1: Pricing Hero */
+    .pricing-hero {
+      position: relative;
+      padding: 80px 0 60px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background: radial-gradient(circle at 20% 80%, rgba(255,194,75,0.06), transparent 60%);
+    }
+    .pricing-hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,107,71,0.06), transparent 60%);
+      animation: floatPulse 11s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes floatPulse {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+      50% { transform: translate(-30px, 40px) scale(1.2); opacity: 1; }
+    }
+    .pricing-hero .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .pricing-hero h1 {
+      font-family: var(--display);
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      animation: fadeSlideUp 1s ease both;
+    }
+    .pricing-hero h1 em {
+      background: linear-gradient(135deg, var(--coral), var(--amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% auto;
+      animation: gradientShift 6s ease-in-out infinite;
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pricing-hero p {
+      color: var(--text-dim);
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 20px 0 32px;
+      max-width: 48ch;
+      animation: fadeSlideUp 1s ease 0.2s both;
+    }
+    .pricing-hero .hero-stats {
+      display: flex;
+      gap: 40px;
+      animation: fadeSlideUp 1s ease 0.3s both;
+    }
+    .pricing-hero .hero-stats div b {
+      display: block;
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--paper), var(--text-dim));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pricing-hero .hero-stats div span {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+    }
+    .pricing-hero .hero-visual {
+      position: relative;
+      animation: fadeSlideUp 1s ease 0.4s both;
+    }
+    .pricing-hero .hero-visual img {
+      width: 100%;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      transition: transform 0.6s ease;
+    }
+    .pricing-hero .hero-visual:hover img { transform: scale(1.02) rotate(-1deg); }
+    .pricing-hero .floating-badge {
+      position: absolute;
+      background: rgba(19,23,34,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      animation: floatBadge 4s ease-in-out infinite;
+    }
+    .pricing-hero .floating-badge:nth-child(2) { top: -10px; right: -10px; animation-delay: 1s; }
+    .pricing-hero .floating-badge:nth-child(3) { bottom: 20px; left: -20px; animation-delay: 2s; }
+    .pricing-hero .floating-badge b { color: var(--paper); display: block; font-size: 0.9rem; }
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Section 2: Pricing Plans */
+    .pricing-plans {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .section-label::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--amber);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(255,194,75,0.15);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(255,194,75,0.15); }
+      50% { box-shadow: 0 0 0 8px rgba(255,194,75,0.05); }
+    }
+    .pricing-plans h2 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .pricing-plans .subtitle {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      max-width: 50ch;
+      margin-bottom: 48px;
+    }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .plan-card {
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 36px 32px;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .plan-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--coral), var(--amber));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+    .plan-card:hover::before { transform: scaleX(1); }
+    .plan-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(255,107,71,0.3);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .plan-card.popular {
+      border-color: var(--amber);
+      background: #1a1f2e;
+    }
+    .plan-card.popular .badge {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--ink);
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 2px 14px;
+      border-radius: 40px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-left: 10px;
+    }
+    .plan-card .plan-name { font-family: var(--display); font-size: 1.2rem; font-weight: 600; }
+    .plan-card .plan-price {
+      font-family: var(--display);
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin: 16px 0 4px;
+    }
+    .plan-card .plan-price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text-dim);
+    }
+    .plan-card .plan-desc {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .plan-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 32px;
+      flex-grow: 1;
+    }
+    .plan-card ul li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-card ul li i { color: var(--coral); width: 18px; }
+    .plan-card .btn-plan {
+      display: inline-block;
+      padding: 12px 0;
+      text-align: center;
+      border-radius: 60px;
+      font-weight: 600;
+      transition: all 0.3s;
+      background: var(--paper);
+      color: var(--ink);
+      border: none;
+      width: 100%;
+      cursor: pointer;
+    }
+    .plan-card .btn-plan.outline {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--paper);
+    }
+    .plan-card .btn-plan:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    /* Section 3: Features Comparison */
+    .features-compare {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+      background: radial-gradient(circle at 70% 30%, rgba(255,107,71,0.03), transparent 60%);
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 40px;
+    }
+    .compare-item {
+      background: var(--ink-soft);
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+    .compare-item:hover {
+      transform: translateY(-4px);
+      background: var(--ink-soft-2);
+    }
+    .compare-item .feature-icon {
+      font-size: 2rem;
+      color: var(--coral);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .compare-item h4 { font-family: var(--display); font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .compare-item p { color: var(--text-dim); font-size: 0.85rem; }
+
+    /* Section 4: FAQ */
+    .faq-section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .faq-item {
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.4s ease;
+    }
+    .faq-item:hover {
+      border-color: var(--coral);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .faq-item h4 { font-family: var(--display); font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+    .faq-item p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
+
+    /* Section 5: Enterprise */
+    .enterprise-section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--ink-soft);
+    }
+    .enterprise-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .enterprise-grid img {
+      width: 100%;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      transition: transform 0.6s ease;
+    }
+    .enterprise-grid img:hover { transform: scale(1.02); }
+    .enterprise-grid h3 { font-family: var(--display); font-size: 2rem; font-weight: 700; margin-bottom: 16px; }
+    .enterprise-grid p { color: var(--text-dim); font-size: 1.05rem; line-height: 1.7; margin-bottom: 24px; }
+    .enterprise-features { display: flex; gap: 24px; flex-wrap: wrap; }
+    .enterprise-features span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-dim);
+      font-size: 0.95rem;
+    }
+    .enterprise-features span i { color: var(--coral); }
+
+    /* Section 6: CTA */
+    .cta-section {
+      padding: 80px 0;
+      background:
+        linear-gradient(135deg, rgba(23,28,41,0.95), rgba(23,28,41,0.85)),
+        url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(255,107,71,0.06), transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(255,194,75,0.06), transparent 50%);
+      animation: rotateGlow 30s linear infinite;
+    }
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .cta-section .cta-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .cta-section h2 {
+      font-family: var(--display);
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .cta-section h2 em {
+      background: linear-gradient(135deg, var(--coral), var(--amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-section p {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+    .cta-section .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta-section .btn-primary-lg {
+      padding: 16px 36px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      background: var(--paper);
+      color: var(--ink);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cta-section .btn-primary-lg:hover {
+      transform: scale(1.06) translateY(-3px);
+      box-shadow: 0 16px 48px rgba(246,244,238,0.2);
+    }
+    .cta-section .btn-ghost-lg {
+      padding: 16px 36px;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: var(--paper);
+      border: 1px solid var(--line);
+      transition: all 0.4s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cta-section .btn-ghost-lg:hover {
+      border-color: var(--paper);
+      background: rgba(255,255,255,0.05);
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 1024px) {
+      .pricing-hero .grid-2 { grid-template-columns: 1fr; }
+      .plans-grid { grid-template-columns: 1fr 1fr; }
+      .compare-grid { grid-template-columns: 1fr 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .enterprise-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 660px) {
+      .plans-grid { grid-template-columns: 1fr; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .pricing-hero .hero-stats { flex-direction: column; gap: 16px; }
+      .pricing-hero .floating-badge { display: none; }
+      .enterprise-features { flex-direction: column; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header-container"></div>
+
+  <!-- Section 1: Pricing Hero -->
+  <section class="pricing-hero">
+    <div class="wrap">
+      <div class="grid-2">
+        <div>
+          <div class="section-label">Pricing</div>
+          <h1>Simple, <em>transparent</em> pricing</h1>
+          <p>Start for free, scale as you grow. No hidden fees, no long-term contracts — just the tools you need.</p>
+          <div class="hero-stats">
+            <div><b>14-day</b><span>Free trial</span></div>
+            <div><b>No</b><span>Setup fees</span></div>
+            <div><b>Cancel</b><span>Anytime</span></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img src="./assets/AI21.webp" alt="Pricing plans comparison" />
+          <div class="floating-badge" style="top:-10px;right:-10px;">
+            <b>💰 14-day</b>
+            Free trial
+          </div>
+          <div class="floating-badge" style="bottom:20px;left:-20px;">
+            <b>✅ No</b>
+            Setup fees
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Pricing Plans -->
+  <section class="pricing-plans">
+    <div class="wrap">
+      <div class="section-label">Choose Your Plan</div>
+      <h2>Pick the plan that fits <em>your team</em></h2>
+      <p class="subtitle">All plans include core features. Upgrade as you grow.</p>
+      <div class="plans-grid">
+        <div class="plan-card reveal">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">$0 <span>/ month</span></div>
+          <div class="plan-desc">For small teams exploring Signal.</div>
+          <ul>
+            <li><i class="fas fa-check"></i> 1,000 events / day</li>
+            <li><i class="fas fa-check"></i> 3 integrations</li>
+            <li><i class="fas fa-check"></i> Email alerts</li>
+            <li><i class="fas fa-check"></i> Community support</li>
+          </ul>
+          <a href="404.html" class="btn-plan outline">Get started</a>
+        </div>
+        <div class="plan-card popular reveal">
+          <div class="plan-name">Professional <span class="badge">Popular</span></div>
+          <div class="plan-price">$49 <span>/ month</span></div>
+          <div class="plan-desc">For growing teams ready to scale.</div>
+          <ul>
+            <li><i class="fas fa-check"></i> 50,000 events / day</li>
+            <li><i class="fas fa-check"></i> 20+ integrations</li>
+            <li><i class="fas fa-check"></i> Slack & webhook alerts</li>
+            <li><i class="fas fa-check"></i> Custom workflows</li>
+            <li><i class="fas fa-check"></i> Email support</li>
+          </ul>
+          <a href="404.html" class="btn-plan">Start trial</a>
+        </div>
+        <div class="plan-card reveal">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price">Custom</div>
+          <div class="plan-desc">For organizations with advanced needs.</div>
+          <ul>
+            <li><i class="fas fa-check"></i> Unlimited events</li>
+            <li><i class="fas fa-check"></i> All integrations</li>
+            <li><i class="fas fa-check"></i> SSO & RBAC</li>
+            <li><i class="fas fa-check"></i> Dedicated support</li>
+            <li><i class="fas fa-check"></i> On-premise deployment</li>
+          </ul>
+          <a href="404.html" class="btn-plan outline">Contact sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Features Comparison -->
+  <section class="features-compare">
+    <div class="wrap">
+      <div class="section-label">Compare Features</div>
+      <h2 style="font-family:var(--display);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;">Everything you need to <em style="background:linear-gradient(135deg,var(--coral),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">succeed</em></h2>
+      <p style="color:var(--text-dim);font-size:1.05rem;max-width:50ch;">All plans include core capabilities. Premium features available in higher tiers.</p>
+      <div class="compare-grid">
+        <div class="compare-item"><span class="feature-icon"><i class="fas fa-bolt"></i></span><h4>Real-time Alerts</h4><p>Instant notifications</p></div>
+        <div class="compare-item"><span class="feature-icon"><i class="fas fa-brain"></i></span><h4>Explainable AI</h4><p>Plain-language reasoning</p></div>
+        <div class="compare-item"><span class="feature-icon"><i class="fas fa-plug"></i></span><h4>60+ Integrations</h4><p>Connect your tools</p></div>
+        <div class="compare-item"><span class="feature-icon"><i class="fas fa-shield-alt"></i></span><h4>Enterprise Security</h4><p>SOC 2 Type II</p></div>
+        <div class="compare-item"><span class="feature-icon"><i class="fas fa-cogs"></i></span><h4>Custom Workflows</h4><p>Rule-based automation</p></div>
+        <div class="compare-item"><span class="feature-icon"><i class="fas fa-chart-line"></i></span><h4>Forecasting</h4><p>Predictive analytics</p></div>
+        <div class="compare-item"><span class="feature-icon"><i class="fas fa-users"></i></span><h4>Team Collaboration</h4><p>Shared dashboards</p></div>
+        <div class="compare-item"><span class="feature-icon"><i class="fas fa-headset"></i></span><h4>24/7 Support</h4><p>Premium assistance</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: FAQ -->
+  <section class="faq-section">
+    <div class="wrap">
+      <div class="section-label">FAQ</div>
+      <h2 style="font-family:var(--display);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;">Frequently asked <em style="background:linear-gradient(135deg,var(--coral),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">questions</em></h2>
+      <p style="color:var(--text-dim);font-size:1.05rem;max-width:50ch;">Quick answers to common questions about our pricing and plans.</p>
+      <div class="faq-grid">
+        <div class="faq-item reveal">
+          <h4>Can I upgrade or downgrade my plan?</h4>
+          <p>Yes, you can change your plan at any time. Upgrades take effect immediately, and downgrades apply at the next billing cycle.</p>
+        </div>
+        <div class="faq-item reveal">
+          <h4>Is there a free trial available?</h4>
+          <p>Yes! All plans come with a 14-day free trial. No credit card required to get started.</p>
+        </div>
+        <div class="faq-item reveal">
+          <h4>What payment methods do you accept?</h4>
+          <p>We accept all major credit cards, PayPal, and for Enterprise plans, we offer invoice-based billing.</p>
+        </div>
+        <div class="faq-item reveal">
+          <h4>Can I cancel my subscription anytime?</h4>
+          <p>Absolutely. You can cancel anytime with no penalties or hidden fees. Your data will remain accessible for 30 days.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Enterprise -->
+  <section class="enterprise-section">
+    <div class="wrap">
+      <div class="section-label">Enterprise</div>
+      <div class="enterprise-grid">
+        <div>
+          <h3 style="font-family:var(--display);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700;">For <em style="background:linear-gradient(135deg,var(--coral),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">large organizations</em></h3>
+          <p>Get dedicated support, advanced security, and custom deployment options for your enterprise needs.</p>
+          <div class="enterprise-features">
+            <span><i class="fas fa-check-circle"></i> SSO & SAML</span>
+            <span><i class="fas fa-check-circle"></i> On-premise deployment</span>
+            <span><i class="fas fa-check-circle"></i> Dedicated account manager</span>
+            <span><i class="fas fa-check-circle"></i> Custom SLAs</span>
+          </div>
+        </div>
+        <img src="./assets/AI22.webp" alt="Enterprise solutions" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: CTA -->
+  <section class="cta-section">
+    <div class="wrap">
+      <div class="cta-content">
+        <div class="section-label" style="justify-content:center;">Ready to Get Started</div>
+        <h2>Start your <em>free trial</em> today</h2>
+        <p>No credit card required. Get started in minutes and see the difference Signal can make.</p>
+        <div class="cta-buttons">
+          <a href="404.html" class="btn-primary-lg"><i class="fas fa-rocket"></i> Start free trial</a>
+          <a href="404.html" class="btn-ghost-lg"><i class="fas fa-play-circle"></i> Watch demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-container"></div>
+
+  <script>
+    function loadComponent(elementId, filePath, fallbackMessage) {
+      fetch(filePath)
+        .then(response => {
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById(elementId).innerHTML = data;
+          if (elementId === 'header-container') {
+            setActiveNavLink();
+          }
+        })
+        .catch(error => {
+          console.error(`Error loading ${filePath}:`, error);
+          document.getElementById(elementId).innerHTML = `<div style="background:#0B0E14;padding:20px;text-align:center;border-bottom:1px solid rgba(246,244,238,0.12);"><p style="color:#F6F4EE;">⚠️ ${fallbackMessage || 'Failed to load component'}</p></div>`;
+        });
+    }
+
+    function setActiveNavLink() {
+      const currentPage = window.location.pathname.split('/').pop() || 'pricing.html';
+      const navLinks = document.querySelectorAll('#header-container .nav-links a');
+      navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    loadComponent('header-container', 'header.html', 'Header failed to load.');
+    loadComponent('footer-container', 'footer.html', 'Footer failed to load.');
+
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('.pricing-hero, .pricing-plans, .features-compare, .faq-section, .enterprise-section, .cta-section');
+      sections.forEach((section, index) => {
+        section.classList.add('reveal');
+        if (index === 0) section.classList.add('active');
+        revealObserver.observe(section);
+      });
+    });
+
+    console.log('🚀 Signal Pricing Page Loaded');
+  </script>
+</body>
+</html>
