@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Signal — Login</title>
+  <title>Login</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -23,8 +23,9 @@
       align-items: center;
       justify-content: center;
       background-image:
-        radial-gradient(circle at 20% 50%, rgba(255,107,71,0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(255,194,75,0.05) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(255,107,71,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(255,194,75,0.06) 0%, transparent 50%);
+      padding: 20px;
     }
 
     :root {
@@ -32,7 +33,9 @@
       --ink-soft: #131722;
       --ink-soft-2: #171C29;
       --paper: #F6F4EE;
-      --coral: #FF6B47;
+      --accent: #FF6B47;
+      --accent-hover: #FF5A33;
+      --accent-soft: rgba(255,107,71,0.15);
       --amber: #FFC24B;
       --line: rgba(246,244,238,0.12);
       --text-dim: rgba(246,244,238,0.62);
@@ -43,29 +46,28 @@
     .login-wrapper {
       width: 100%;
       max-width: 440px;
-      padding: 20px;
       position: relative;
     }
 
     .back-home {
-      position: absolute;
-      top: 0;
-      left: 20px;
-      color: var(--text-dim);
-      font-size: 0.9rem;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
+      color: var(--text-dim);
+      font-size: 0.9rem;
       transition: all 0.3s ease;
       text-decoration: none;
       padding: 8px 12px;
       border-radius: 8px;
       border: 1px solid transparent;
+      margin-bottom: 12px;
+      cursor: pointer;
     }
     .back-home:hover {
       color: var(--paper);
       border-color: var(--line);
       background: rgba(255,255,255,0.03);
+      transform: translateX(-2px);
     }
     .back-home i {
       font-size: 1rem;
@@ -77,7 +79,6 @@
       border-radius: 24px;
       padding: 48px 40px 40px;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-      margin-top: 20px;
       position: relative;
       overflow: hidden;
     }
@@ -88,21 +89,39 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--coral), var(--amber));
+      background: linear-gradient(90deg, var(--accent), var(--amber));
     }
 
     .login-logo {
       text-align: center;
       margin-bottom: 32px;
     }
-    .login-logo h1 {
-      font-family: var(--display);
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .login-logo .logo-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
     }
-    .login-logo h1 span {
-      color: var(--coral);
+    .login-logo .logo-placeholder img {
+      max-width: 200px;
+      height: auto;
+      display: block;
+    }
+    .login-logo .logo-placeholder .logo-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      background: var(--accent-soft);
+      border: 2px dashed var(--accent);
+      color: var(--accent);
+      font-size: 12px;
+      font-family: var(--mono);
+      text-align: center;
+      line-height: 1.4;
+      padding: 8px;
     }
     .login-logo p {
       color: var(--text-dim);
@@ -126,7 +145,7 @@
       border-radius: 8px;
       background: transparent;
       color: var(--text-dim);
-      font-family: var(--body);
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: 0.9rem;
       font-weight: 500;
       cursor: pointer;
@@ -134,9 +153,9 @@
       position: relative;
     }
     .role-btn.active {
-      background: var(--coral);
+      background: var(--accent);
       color: var(--ink);
-      box-shadow: 0 4px 16px rgba(255, 107, 71, 0.3);
+      box-shadow: 0 4px 16px rgba(255,107,71,0.3);
     }
     .role-btn:hover:not(.active) {
       color: var(--paper);
@@ -169,8 +188,8 @@
       transition: all 0.3s ease;
     }
     .form-group .input-wrapper:focus-within {
-      border-color: var(--coral);
-      box-shadow: 0 0 0 3px rgba(255, 107, 71, 0.1);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,107,71,0.1);
     }
     .form-group .input-wrapper .input-icon {
       padding: 0 0 0 16px;
@@ -186,7 +205,7 @@
       outline: none;
       color: var(--paper);
       font-size: 0.95rem;
-      font-family: var(--body);
+      font-family: 'IBM Plex Sans', sans-serif;
     }
     .form-group .input-wrapper input::placeholder {
       color: var(--text-dim);
@@ -218,16 +237,13 @@
 
     .validation-msg {
       font-size: 0.78rem;
-      color: var(--coral);
+      color: #F87171;
       margin-top: 6px;
       display: none;
       font-family: var(--mono);
     }
     .validation-msg.show {
       display: block;
-    }
-    .validation-msg.success {
-      color: #4BC04B;
     }
 
     .form-options {
@@ -247,7 +263,7 @@
     .form-options .remember-me input[type="checkbox"] {
       width: 16px;
       height: 16px;
-      accent-color: var(--coral);
+      accent-color: var(--accent);
       cursor: pointer;
     }
     .form-options .forgot-password {
@@ -265,11 +281,11 @@
       padding: 14px;
       border: none;
       border-radius: 12px;
-      background: var(--coral);
+      background: var(--accent);
       color: var(--ink);
       font-size: 1rem;
       font-weight: 600;
-      font-family: var(--body);
+      font-family: 'IBM Plex Sans', sans-serif;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
@@ -294,7 +310,8 @@
     }
     .login-btn:hover {
       transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 32px rgba(255, 107, 71, 0.3);
+      box-shadow: 0 8px 32px rgba(255,107,71,0.3);
+      background: var(--accent-hover);
     }
     .login-btn:active {
       transform: translateY(0) scale(0.98);
@@ -331,7 +348,7 @@
       font-size: 0.9rem;
     }
     .create-account a {
-      color: var(--coral);
+      color: var(--accent);
       font-weight: 600;
       text-decoration: none;
       transition: color 0.3s ease;
@@ -341,11 +358,11 @@
     }
 
     .error-msg {
-      background: rgba(255, 107, 71, 0.1);
-      border: 1px solid rgba(255, 107, 71, 0.2);
+      background: rgba(255,107,71,0.1);
+      border: 1px solid rgba(255,107,71,0.2);
       border-radius: 8px;
       padding: 10px 14px;
-      color: var(--coral);
+      color: var(--accent);
       font-size: 0.85rem;
       margin-bottom: 16px;
       display: none;
@@ -357,36 +374,6 @@
     }
     .error-msg i {
       font-size: 1rem;
-    }
-
-    .demo-credentials {
-      margin-top: 20px;
-      padding: 16px;
-      background: var(--ink-soft-2);
-      border-radius: 12px;
-      border: 1px solid var(--line);
-    }
-    .demo-credentials p {
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      font-family: var(--mono);
-      text-align: center;
-      line-height: 1.6;
-    }
-    .demo-credentials .cred-row {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-    .demo-credentials .cred-row span {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      font-family: var(--mono);
-    }
-    .demo-credentials .cred-row .highlight {
-      color: var(--amber);
     }
 
     @media (max-width: 480px) {
@@ -405,15 +392,35 @@
         flex-direction: row;
       }
       .back-home {
-        left: 10px;
         font-size: 0.8rem;
         padding: 6px 10px;
       }
-      .demo-credentials .cred-row {
-        flex-direction: column;
-        gap: 4px;
-        align-items: center;
+      .login-logo .logo-placeholder img {
+        max-width: 150px;
       }
+    }
+
+    /* Microsoft Edge autofill fix */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 1000px var(--ink-soft-2) inset !important;
+      -webkit-text-fill-color: #F6F4EE !important;
+      border-color: var(--line);
+      transition: background-color 5000s ease-in-out 0s;
+    }
+    input::-ms-clear,
+    input::-ms-reveal {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+    input::-webkit-search-decoration,
+    input::-webkit-search-cancel-button,
+    input::-webkit-search-results-button,
+    input::-webkit-search-results-decoration {
+      display: none;
     }
   </style>
 </head>
@@ -426,7 +433,22 @@
 
     <div class="login-container">
       <div class="login-logo">
-        <h1>Signal<span>.</span></h1>
+        <div class="logo-placeholder">
+          <!-- 
+            ─── LOGO PLACEHOLDER ───
+            Replace the img src with your own logo.
+            The fallback div will show if image fails to load.
+          -->
+          <img 
+            id="logoImage"
+            src="./assets/stackly_logo.webp"
+            alt="Logo"
+            onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';"
+          />
+          <div id="logoFallback" class="logo-fallback" style="display:none;">
+            <span>Your<br />Logo</span>
+          </div>
+        </div>
         <p>Sign in to your account</p>
       </div>
 
@@ -538,16 +560,10 @@
 
         if (email.length > 0 && !gmailRegex.test(email)) {
           emailValidation.classList.add('show');
-          emailValidation.classList.remove('success');
           return false;
-        } else if (email.length > 0 && gmailRegex.test(email)) {
-          emailValidation.classList.remove('show');
-          emailValidation.classList.remove('success');
-          return true;
         } else {
           emailValidation.classList.remove('show');
-          emailValidation.classList.remove('success');
-          return false;
+          return email.length > 0 && gmailRegex.test(email);
         }
       }
 
@@ -576,7 +592,28 @@
         errorMsg.classList.remove('show');
       }
 
-      // --- Login handler: accepts ANY Gmail + any password (min 4 chars) ---
+      // --- Direct navigation without loading delay ---
+      function redirectToDashboard() {
+        const email = emailInput.value.trim();
+        const redirectUrl = (selectedRole === 'admin') ? 'admindashboard.html' : 'dashboard.html';
+        
+        // ✅ Store user data in the format that dashboard expects
+        const userData = {
+          email: email,
+          role: selectedRole,
+          name: email.split('@')[0] // Extract username from email
+        };
+        
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('userRole', selectedRole);
+        localStorage.setItem('userEmail', email);
+        
+        // Navigate immediately
+        window.location.replace(redirectUrl);
+      }
+
+      // --- Login handler ---
       function handleLogin(e) {
         e.preventDefault();
         const email = emailInput.value.trim();
@@ -596,21 +633,9 @@
         }
 
         // ✅ Accept ANY Gmail + any password (>=4 chars)
-        // For demo, we just simulate a successful login.
-        // Store login state and redirect based on role.
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userRole', selectedRole);
-        localStorage.setItem('userEmail', email);
-
-        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-        loginBtn.disabled = true;
-
-        setTimeout(() => {
-          const redirectUrl = (selectedRole === 'admin') ? 'admindashboard.html' : 'dashboard.html';
-          window.location.href = redirectUrl;
-        }, 800);
-      } 
-
+        // Navigate immediately without loading delay
+        redirectToDashboard();
+      }
 
       loginForm.addEventListener('submit', handleLogin);
 
@@ -631,7 +656,7 @@
       // --- Init ---
       setRole('user');
       hideError();
-      console.log('🔐 Signal Login — any Gmail + password (≥4 chars) works');
+      console.log('🔐 Login page ready — orange theme');
     })();
   </script>
 
