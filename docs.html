@@ -18,6 +18,7 @@
       overflow-x: hidden;
       width: 100%;
     }
+    body.nav-open { overflow: hidden; }
     a { color: inherit; text-decoration: none; }
     img, svg { max-width: 100%; }
 
@@ -84,7 +85,7 @@
       cursor: pointer;
     }
     .header-logo .logo-placeholder {
-      width: 56px;
+      width: 70px;
       height: 56px;
       border-radius: 12px;
       overflow: hidden;
@@ -175,9 +176,11 @@
       font-size: 1.6rem;
       cursor: pointer;
       padding: 4px 8px;
+      position: relative;
+      z-index: 1200;
     }
 
-    /* Mobile Navigation */
+    /* Mobile Navigation — full-height centered overlay */
     @media (max-width: 860px) {
       :root { --header-height: 70px; }
       .header-inner {
@@ -186,49 +189,49 @@
         position: relative;
       }
       .header-logo .logo-placeholder {
-        width: 48px;
+        width: 60px;
         height: 48px;
       }
       .header-nav {
         order: 3;
-        flex-basis: 100%;
         display: none;
         flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-        padding: 12px 0 8px;
-        border-top: 1px solid var(--line);
-        gap: 2px;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
         background: rgba(11,14,20,0.98);
-        margin: 0 -16px;
-        padding-left: 16px;
-        padding-right: 16px;
-        width: calc(100% + 32px);
-        position: absolute;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        position: fixed;
         top: var(--header-height);
         left: 0;
         right: 0;
-        border-bottom: 1px solid var(--line);
+        bottom: 0;
+        height: calc(100dvh - var(--header-height));
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border-top: 1px solid var(--line);
+        z-index: 1100;
       }
       .header-nav.open {
         display: flex;
       }
       .header-nav a {
-        font-size: 0.95rem;
-        padding: 12px 16px;
+        font-size: 1.35rem;
+        font-weight: 600;
+        padding: 16px 28px;
         white-space: nowrap;
-        width: 100%;
-        text-align: left;
-        border-radius: 8px;
-        border-bottom: 1px solid rgba(246,244,238,0.05);
+        width: auto;
+        text-align: center;
+        border-radius: 10px;
+        border-bottom: none;
       }
-      .header-nav a:last-child { border-bottom: none; }
       .header-nav a.active::after {
-        bottom: 10px;
-        left: 16px;
-        transform: none;
-        width: 20px;
-        height: 2px;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 22px;
       }
       .header-mobile-toggle { display: block; }
       .header-actions .btn-trial { padding: 6px 14px; font-size: 0.8rem; }
@@ -238,8 +241,8 @@
     @media (max-width: 480px) {
       :root { --header-height: 62px; }
       .header-inner { padding: 6px 12px; }
-      .header-logo .logo-placeholder { width: 42px; height: 42px; }
-      .header-nav a { font-size: 0.9rem; padding: 10px 14px; }
+      .header-logo .logo-placeholder { width: 52px; height: 42px; }
+      .header-nav a { font-size: 1.2rem; padding: 14px 24px; }
       .header-actions .btn-trial { padding: 5px 12px; font-size: 0.75rem; }
       .header-actions .btn-login { padding: 5px 10px; font-size: 0.75rem; }
       .header-mobile-toggle { font-size: 1.4rem; }
@@ -1029,6 +1032,7 @@
         <div class="footer-col">
           <h4>Quick Links</h4>
           <ul>
+            <li><a href="index.html">Home</a></li>
             <li><a href="platform.html">Platform</a></li>
             <li><a href="solutions.html">Solutions</a></li>
             <li><a href="pricing.html">Pricing</a></li>
@@ -1040,18 +1044,25 @@
           <h4>Visit Us</h4>
           <div class="footer-address">
             <strong>Stackly, Inc.</strong><br />
+            <i class="fas fa-location-dot" aria-hidden="true" style="color:var(--coral);width:14px;text-align:center;margin-right:4px;"></i>
             123 Tech Park Drive<br />
             San Francisco, CA 94105
+          </div>
+          <div class="footer-contact" style="margin-top:10px;">
+            <a href="tel:+14155550123" style="display:flex;align-items:center;gap:8px;color:var(--text-dim);font-size:0.88rem;">
+              <i class="fas fa-phone" aria-hidden="true" style="color:var(--coral);width:14px;text-align:center;"></i>
+              +1 (415) 555-0123
+            </a>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
         <span>&copy; 2026 Stackly, Inc. All rights reserved.</span>
         <div class="footer-socials">
-          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="404.html" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="404.html" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="404.html" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="404.html" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
     </div>
@@ -1063,6 +1074,7 @@
     const nav = document.getElementById('mainNav');
     toggleBtn.addEventListener('click', () => {
       nav.classList.toggle('open');
+      document.body.classList.toggle('nav-open');
       const icon = toggleBtn.querySelector('i');
       if (nav.classList.contains('open')) {
         icon.className = 'fas fa-times';
@@ -1076,6 +1088,7 @@
     navLinks.forEach(link => {
       link.addEventListener('click', () => {
         nav.classList.remove('open');
+        document.body.classList.remove('nav-open');
         const icon = toggleBtn.querySelector('i');
         icon.className = 'fas fa-bars';
       });

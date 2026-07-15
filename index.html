@@ -103,7 +103,7 @@
       cursor: pointer;
     }
     .header-logo .logo-placeholder {
-      width: 56px;
+      width: 70px;
       height: 56px;
       border-radius: 12px;
       overflow: hidden;
@@ -197,7 +197,7 @@
       z-index: 1001;
     }
 
-    /* Mobile Navigation - Full width vertical menu */
+    /* Mobile Navigation - Full height overlay menu */
     @media (max-width: 860px) {
       :root {
         --header-height: 70px;
@@ -208,50 +208,45 @@
         position: relative;
       }
       .header-logo .logo-placeholder {
-        width: 48px;
+        width: 60px;
         height: 48px;
       }
       .header-nav {
-        order: 3;
-        flex-basis: 100%;
         display: none;
         flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-        padding: 12px 0 8px;
-        border-top: 1px solid var(--line);
-        gap: 2px;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
         background: rgba(11,14,20,0.98);
-        margin: 0 -16px;
-        padding-left: 16px;
-        padding-right: 16px;
-        width: calc(100% + 32px);
-        position: absolute;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        position: fixed;
         top: var(--header-height);
         left: 0;
         right: 0;
-        border-bottom: 1px solid var(--line);
+        bottom: 0;
+        height: calc(100vh - var(--header-height));
+        height: calc(100dvh - var(--header-height));
+        overflow-y: auto;
         z-index: 999;
+        border-top: 1px solid var(--line);
       }
       .header-nav.open {
         display: flex !important;
       }
       .header-nav a {
-        font-size: 0.95rem;
-        padding: 12px 16px;
+        font-size: 1.15rem;
+        padding: 14px 24px;
         white-space: nowrap;
-        width: 100%;
-        text-align: left;
+        width: auto;
+        text-align: center;
         border-radius: 8px;
-        border-bottom: 1px solid rgba(246,244,238,0.05);
-      }
-      .header-nav a:last-child {
         border-bottom: none;
       }
       .header-nav a.active::after {
-        bottom: 10px;
-        left: 16px;
-        transform: none;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
         width: 20px;
         height: 2px;
       }
@@ -276,12 +271,12 @@
         padding: 6px 12px;
       }
       .header-logo .logo-placeholder {
-        width: 42px;
+        width: 52px;
         height: 42px;
       }
       .header-nav a {
-        font-size: 0.9rem;
-        padding: 10px 14px;
+        font-size: 1.05rem;
+        padding: 12px 20px;
       }
       .header-actions .btn-trial {
         padding: 5px 12px;
@@ -1216,6 +1211,169 @@
       .blog-card p { font-size: 0.8rem; }
     }
 
+    /* ---------- NEW SECTION: INTEGRATIONS ---------- */
+    .integrations-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+    }
+    .integration-item {
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.3s var(--ease-spring);
+    }
+    .integration-item:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,107,71,0.3);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+    .integration-item i {
+      font-size: 1.6rem;
+      color: var(--amber);
+      width: 40px;
+      text-align: center;
+    }
+    .integration-item .info h4 {
+      font-family: var(--display);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .integration-item .info p {
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+    @media (max-width: 480px) {
+      .integrations-grid { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 861px) {
+      .integrations-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ---------- NEW SECTION: PRICING ---------- */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      width: 100%;
+    }
+    .pricing-card {
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.4s var(--ease-spring);
+      position: relative;
+    }
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,107,71,0.4);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+    .pricing-card.popular {
+      border-color: var(--amber);
+      background: var(--ink-soft-2);
+    }
+    .pricing-card.popular::after {
+      content: 'Most popular';
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      background: var(--amber);
+      color: var(--ink);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+    .pricing-card .price {
+      font-family: var(--display);
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin: 12px 0 4px;
+    }
+    .pricing-card .price small {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text-dim);
+    }
+    .pricing-card .description {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+    .pricing-card ul {
+      list-style: none;
+      text-align: left;
+      margin: 16px 0 24px;
+    }
+    .pricing-card ul li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pricing-card ul li:last-child { border-bottom: none; }
+    .pricing-card ul li i { color: var(--amber); width: 20px; }
+    .pricing-card .btn-primary { width: 100%; text-align: center; justify-content: center; }
+
+    @media (min-width: 561px) and (max-width: 860px) {
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 861px) {
+      .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ---------- NEW SECTION: FAQ ---------- */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px 20px;
+      transition: all 0.3s var(--ease-out);
+      cursor: pointer;
+    }
+    .faq-item:hover { border-color: rgba(255,107,71,0.3); }
+    .faq-item .question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .faq-item .question i { color: var(--coral); transition: transform 0.3s ease; }
+    .faq-item.active .question i { transform: rotate(180deg); }
+    .faq-item .answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--ease-out), padding 0.3s ease;
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .faq-item.active .answer {
+      max-height: 200px;
+      padding-top: 12px;
+    }
+
     /* ---------- FOOTER (custom Stackly footer) ---------- */
     .site-footer {
       background: var(--ink-soft);
@@ -1381,12 +1539,6 @@
       max-width: 100%;
       height: auto;
     }
-    /* NOTE: .header-inner intentionally excluded here — it must NOT clip
-       overflow, because the mobile .header-nav dropdown is an absolutely
-       positioned descendant of .header-inner. If .header-inner clips
-       overflow, the dropdown gets visually clipped away even though the
-       "open" class is applied correctly, which is why the hamburger menu
-       appeared broken on mobile/responsive widths. */
     .wrap, .hero-inner {
       overflow: hidden;
     }
@@ -1564,6 +1716,103 @@
     </div>
   </section>
 
+  <!-- ============ NEW SECTION: INTEGRATIONS ============ -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Integrations</div>
+        <h2>Works where you already work.</h2>
+        <p>Connect Signal to your data stack in minutes — no custom plumbing.</p>
+      </div>
+      <div class="integrations-grid">
+        <div class="integration-item"><i class="fab fa-snowflake"></i><div class="info"><h4>Snowflake</h4><p>Real-time sync & query</p></div></div>
+        <div class="integration-item"><i class="fab fa-slack"></i><div class="info"><h4>Slack</h4><p>Alerts & reports</p></div></div>
+        <div class="integration-item"><i class="fas fa-database"></i><div class="info"><h4>BigQuery</h4><p>Native integration</p></div></div>
+        <div class="integration-item"><i class="fab fa-aws"></i><div class="info"><h4>AWS S3</h4><p>Event streaming</p></div></div>
+        <div class="integration-item"><i class="fas fa-chart-pie"></i><div class="info"><h4>Looker</h4><p>Embedded dashboards</p></div></div>
+        <div class="integration-item"><i class="fas fa-code"></i><div class="info"><h4>REST API</h4><p>Custom connectors</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEW SECTION: PRICING ============ -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Pricing</div>
+        <h2>Choose the plan that fits your team.</h2>
+        <p>Start free, scale as you grow. No hidden fees.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Starter</h3>
+          <div class="price">$0 <small>/mo</small></div>
+          <div class="description">For small teams getting started</div>
+          <ul>
+            <li><i class="fas fa-check"></i> 1,000 events/day</li>
+            <li><i class="fas fa-check"></i> 3 integrations</li>
+            <li><i class="fas fa-check"></i> Email alerts</li>
+            <li><i class="fas fa-check"></i> Community support</li>
+          </ul>
+          <a href="register.html" class="btn-primary">Start free</a>
+        </div>
+        <div class="pricing-card popular">
+          <h3>Pro</h3>
+          <div class="price">$49 <small>/mo</small></div>
+          <div class="description">For growing teams</div>
+          <ul>
+            <li><i class="fas fa-check"></i> 50,000 events/day</li>
+            <li><i class="fas fa-check"></i> 20+ integrations</li>
+            <li><i class="fas fa-check"></i> Slack & email alerts</li>
+            <li><i class="fas fa-check"></i> Priority support</li>
+          </ul>
+          <a href="register.html" class="btn-primary">Start trial</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Enterprise</h3>
+          <div class="price">Custom</div>
+          <div class="description">For large organizations</div>
+          <ul>
+            <li><i class="fas fa-check"></i> Unlimited events</li>
+            <li><i class="fas fa-check"></i> All integrations</li>
+            <li><i class="fas fa-check"></i> SSO & audit logs</li>
+            <li><i class="fas fa-check"></i> Dedicated support</li>
+          </ul>
+          <a href="company.html" class="btn-primary">Contact sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEW SECTION: FAQ ============ -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">FAQ</div>
+        <h2>Common questions, answered.</h2>
+        <p>Everything you need to know about Signal.</p>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item active">
+          <div class="question">What data sources does Signal support? <i class="fas fa-chevron-down"></i></div>
+          <div class="answer">We support over 60 integrations including Snowflake, BigQuery, AWS S3, PostgreSQL, and major SaaS tools like Slack, Salesforce, and Stripe.</div>
+        </div>
+        <div class="faq-item">
+          <div class="question">How long does setup take? <i class="fas fa-chevron-down"></i></div>
+          <div class="answer">Most teams are up and running in under 15 minutes. Connect your first data source, and Signal starts detecting patterns immediately.</div>
+        </div>
+        <div class="faq-item">
+          <div class="question">Is my data secure? <i class="fas fa-chevron-down"></i></div>
+          <div class="answer">Yes. Signal is SOC 2 Type II certified with encryption at rest and in transit. We also offer SSO and role-based access control.</div>
+        </div>
+        <div class="faq-item">
+          <div class="question">Can I cancel anytime? <i class="fas fa-chevron-down"></i></div>
+          <div class="answer">Absolutely. No long-term contracts. You can cancel or change your plan at any time from your account settings.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ SECTION 7: CTA ============ -->
   <div class="cta-band">
     <div class="wrap cta">
@@ -1646,6 +1895,7 @@
         <div class="footer-col">
           <h4>Quick Links</h4>
           <ul>
+            <li><a href="index.html">Home</a></li>
             <li><a href="platform.html">Platform</a></li>
             <li><a href="solutions.html">Solutions</a></li>
             <li><a href="pricing.html">Pricing</a></li>
@@ -1657,18 +1907,25 @@
           <h4>Visit Us</h4>
           <div class="footer-address">
             <strong>Stackly, Inc.</strong><br />
+            <i class="fas fa-location-dot" aria-hidden="true" style="color:var(--coral);width:14px;text-align:center;margin-right:4px;"></i>
             123 Tech Park Drive<br />
             San Francisco, CA 94105
+          </div>
+          <div class="footer-contact" style="margin-top:10px;">
+            <a href="tel:+14155550123" style="display:flex;align-items:center;gap:8px;color:var(--text-dim);font-size:0.88rem;">
+              <i class="fas fa-phone" aria-hidden="true" style="color:var(--coral);width:14px;text-align:center;"></i>
+              +1 (415) 555-0123
+            </a>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
         <span>&copy; 2026 Stackly, Inc. All rights reserved.</span>
         <div class="footer-socials">
-          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="404.html" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="404.html" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="404.html" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="404.html" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
     </div>
@@ -1694,57 +1951,56 @@
           } else {
             icon.className = 'fas fa-bars';
           }
-          console.log('Menu toggled, open:', nav.classList.contains('open'));
         });
 
-        // Close mobile menu when a link is clicked
         const navLinks = nav.querySelectorAll('a');
         navLinks.forEach(function(link) {
           link.addEventListener('click', function() {
             nav.classList.remove('open');
             const icon = toggleBtn.querySelector('i');
-            if (icon) {
-              icon.className = 'fas fa-bars';
-            }
+            if (icon) icon.className = 'fas fa-bars';
           });
         });
 
-        // Close mobile menu when clicking outside
         document.addEventListener('click', function(e) {
           if (window.innerWidth <= 860) {
             const header = document.querySelector('.site-header');
             if (header && !header.contains(e.target) && nav.classList.contains('open')) {
               nav.classList.remove('open');
               const icon = toggleBtn.querySelector('i');
-              if (icon) {
-                icon.className = 'fas fa-bars';
-              }
+              if (icon) icon.className = 'fas fa-bars';
             }
           }
         });
 
-        // Close menu on escape key
         document.addEventListener('keydown', function(e) {
           if (e.key === 'Escape' && nav.classList.contains('open')) {
             nav.classList.remove('open');
             const icon = toggleBtn.querySelector('i');
-            if (icon) {
-              icon.className = 'fas fa-bars';
-            }
+            if (icon) icon.className = 'fas fa-bars';
           }
         });
 
-        // Close menu on window resize (if going from mobile to desktop)
         window.addEventListener('resize', function() {
           if (window.innerWidth > 860 && nav.classList.contains('open')) {
             nav.classList.remove('open');
             const icon = toggleBtn.querySelector('i');
-            if (icon) {
-              icon.className = 'fas fa-bars';
-            }
+            if (icon) icon.className = 'fas fa-bars';
           }
         });
       }
+
+      // FAQ accordion
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(function(item) {
+        const question = item.querySelector('.question');
+        question.addEventListener('click', function() {
+          const isActive = item.classList.contains('active');
+          // Close all
+          faqItems.forEach(function(i) { i.classList.remove('active'); });
+          if (!isActive) item.classList.add('active');
+        });
+      });
 
       // Scroll-triggered reveal
       const revealObserver = new IntersectionObserver(function(entries) {
@@ -1764,7 +2020,7 @@
         });
       });
 
-      console.log('🚀 Signal — Professional Landing Page Loaded');
+      console.log('🚀 Signal — Professional Landing Page with 3 new sections');
     })();
   </script>
 

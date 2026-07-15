@@ -81,6 +81,36 @@
     color: var(--paper);
     font-weight: 500;
   }
+  .footer-address .addr-line{
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+  }
+  .footer-address .addr-line i{
+    color:var(--coral);
+    font-size:0.85rem;
+    margin-top:4px;
+    flex-shrink:0;
+    width:14px;
+    text-align:center;
+  }
+
+  .footer-contact{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--text-dim);
+    font-size:0.92rem;
+    margin-top:12px;
+    transition:color .18s ease;
+  }
+  .footer-contact:hover{ color:var(--paper); }
+  .footer-contact i{
+    color:var(--coral);
+    font-size:0.85rem;
+    width:14px;
+    text-align:center;
+  }
 
   .footer-col h4{
     font-family:var(--mono);
@@ -207,6 +237,7 @@
       <div class="footer-col">
         <h4>Quick Links</h4>
         <ul>
+          <li><a href="index.html">Home</a></li>
           <li><a href="platform.html">Platform</a></li>
           <li><a href="solutions.html">Solutions</a></li>
           <li><a href="pricing.html">Pricing</a></li>
@@ -215,17 +246,20 @@
         </ul>
       </div>
 
-      <!-- Column 3: Address + Newsletter -->
+      <!-- Column 3: Address + Contact -->
       <div class="footer-col">
         <h4>Visit Us</h4>
         <address class="footer-address">
           <strong>Stackly, Inc.</strong><br />
-          123 Tech Park Drive<br />
-          Hyderabad<br />
-          <span style="color:var(--text-dim);">India</span>
+          <span class="addr-line">
+            <i class="fas fa-location-dot" aria-hidden="true">📍</i>
+            <span>123 Tech Park Drive<br />Hyderabad<br /><span style="color:var(--text-dim);">India</span></span>
+          </span>
         </address>
-        
-        
+        <a href="tel:+914012345678" class="footer-contact">
+          <i class="fas fa-phone" aria-hidden="true">📞</i>
+          <span>+91 40 1234 5678</span>
+        </a>
       </div>
     </div>
 

@@ -233,43 +233,6 @@
     transform: translateY(-1px);
   }
 
-  .routes{
-    border-top: 1px solid var(--line);
-    padding-top: 22px;
-  }
-
-  .routes p{
-    font-family:'JetBrains Mono', monospace;
-    font-size: 11px;
-    text-transform:uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-
-  .route-links{
-    display:flex;
-    flex-wrap:wrap;
-    gap: 8px;
-  }
-
-  .route-links a{
-    font-family:'JetBrains Mono', monospace;
-    font-size: 12.5px;
-    color: #b7c0dc;
-    text-decoration:none;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--line);
-    padding: 7px 12px;
-    border-radius: 6px;
-    transition: all 0.15s ease;
-  }
-
-  .route-links a:hover{
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
   .footer{
     text-align:center;
     margin-top: 24px;
@@ -323,24 +286,11 @@
 
       <div class="actions">
         <button class="btn-secondary" onclick="history.back()">
-          ← Go back
+          Go back
         </button>
         <button class="btn-primary" onclick="location.href='/'">
           Return to home
         </button>
-      </div>
-
-      <div class="routes">
-        <p>Known endpoints</p>
-        <div class="route-links">
-          <a href="/">Home</a>
-          <a href="/solutions">Solutions</a>
-          <a href="/models">Models</a>
-          <a href="/platform">Platform</a>
-          <a href="/pricing">Pricing</a>
-          <a href="/docs">Docs</a>
-          <a href="/contact">Contact</a>
-        </div>
       </div>
     </div>
   </div>
